@@ -8,7 +8,7 @@
 #include <GL/glu.h>
 #include <cstdio>
 #include "OpenGLHelpers.h"
-#include "resource.h"
+//#include "resource.h"
 
 #include <iostream>
 
