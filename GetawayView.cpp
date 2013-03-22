@@ -330,21 +330,20 @@ void CGetawayView::InitializeOpenGL() {
 
 
 
-/*void CGetawayView::FadeInText(CDC *pDC, CString s1, CString s2, CString s3,
-                              int nFadeDelay, int nDelay, 
-                              CFont *pfont1, CFont *pfont2,
-                              CBitmap *pbmpArt) {
-  CBrush brushBlack(RGB(0, 0, 0));
+void CGetawayView::FadeInText(string s1, string s2, string s3, int ticks, TTF_Font *pfont1, TTF_Font *pfont2) {
+	const SDL_VideoInfo* vi = SDL_GetVideoInfo();
+	
+  /*CBrush brushBlack(RGB(0, 0, 0));
   CRect rectWnd;
   GetClientRect(&rectWnd);
   pDC->SelectObject(pfont1);
   CSize sizeSmall1 = pDC->GetTextExtent(s1);
   CSize sizeSmall2 = pDC->GetTextExtent(s2);
   pDC->SelectObject(pfont2);
-  CSize sizeBig = pDC->GetTextExtent(s3);
+  CSize sizeBig = pDC->GetTextExtent(s3);*/
 
   // Create bitmaps for double buffer drawing
-  CBitmap bmpSmall1;
+  /*CBitmap bmpSmall1;
   bmpSmall1.CreateCompatibleBitmap(pDC, sizeSmall1.cx, sizeSmall1.cy);
   CBitmap bmpSmall2;
   bmpSmall2.CreateCompatibleBitmap(pDC, sizeSmall2.cx, sizeSmall2.cy);
@@ -358,10 +357,20 @@ void CGetawayView::InitializeOpenGL() {
 
   dcCopy.SetBkMode(TRANSPARENT);
   dcCopy.SetTextAlign(TA_RIGHT);
-  CRect rectTmp;
+  CRect rectTmp;*/
+  
   int color;
-  for(color = 0; color < 255; color += 2) {
-    dcCopy.SelectObject(&bmpSmall1);
+  if (ticks < 0 || ticks > 2500) {
+	  return;
+  } else if (ticks < 250) {
+	  color = ticks;
+  } else if (ticks > 2250) {
+	  color = 255 - (ticks - 2250);
+  } else {
+	  color = 255;
+  }
+//  for(color = 0; color < 255; color += 2) {
+    /*dcCopy.SelectObject(&bmpSmall1);
     rectTmp.TopLeft() = CPoint(0, 0);
     rectTmp.BottomRight() = CPoint(sizeSmall1.cx, sizeSmall1.cy);
     dcCopy.FillRect(&rectTmp, &brushBlack);
@@ -370,18 +379,40 @@ void CGetawayView::InitializeOpenGL() {
     dcCopy.TextOut(sizeSmall1.cx, 0, s1);
     pDC->BitBlt(rectWnd.Width() * 2 / 3 - rectWnd.Width() / 20 - sizeSmall1.cx, 
                 rectWnd.Height() / 2 - sizeSmall1.cy * 2, 
-                sizeSmall1.cx, sizeSmall1.cy, &dcCopy, 0, 0, SRCCOPY);
+                sizeSmall1.cx, sizeSmall1.cy, &dcCopy, 0, 0, SRCCOPY);*/
+                
+	SDL_Surface *surface;
+	SDL_Color font_color = {color, color, color};
+	double x, y;
+	
+	if (s1.length() > 0) {
+		if(!(surface = TTF_RenderText_Blended(pfont1, s1.c_str(), font_color)))
+			cout << TTF_GetError() << endl;
+		x = vi->current_w * 2 / 3 - vi->current_w / 20 - surface->w;
+		y = vi->current_h / 2 - surface->h * 2;
+		drawSurface(x, y, x + surface->w, y + surface->h, GL_BGRA, surface);
+		SDL_FreeSurface(surface);
+	}
 
-    dcCopy.SelectObject(&bmpSmall2);
+    /*dcCopy.SelectObject(&bmpSmall2);
     rectTmp.TopLeft() = CPoint(0, 0);
     rectTmp.BottomRight() = CPoint(sizeSmall2.cx, sizeSmall2.cy);
     dcCopy.FillRect(&rectTmp, &brushBlack);
     dcCopy.TextOut(sizeSmall2.cx, 0, s2);
     pDC->BitBlt(rectWnd.Width() * 2 / 3 - rectWnd.Width() / 20 - sizeSmall2.cx, 
                 rectWnd.Height() / 2 - sizeSmall2.cy, 
-                sizeSmall2.cx, sizeSmall2.cy, &dcCopy, 0, 0, SRCCOPY);
+                sizeSmall2.cx, sizeSmall2.cy, &dcCopy, 0, 0, SRCCOPY);*/
+         
+    if (s2.length() > 0) {       
+		if(!(surface = TTF_RenderText_Blended(pfont1, s2.c_str(), font_color)))
+			cout << TTF_GetError() << endl;
+		x = vi->current_w * 2 / 3 - vi->current_w / 20 - surface->w;
+		y = vi->current_h / 2 - surface->h;
+		drawSurface(x, y, x + surface->w, y + surface->h, GL_BGRA, surface);
+		SDL_FreeSurface(surface);
+	}
 
-    dcCopy.SelectObject(&bmpBig);
+    /*dcCopy.SelectObject(&bmpBig);
     rectTmp.TopLeft() = CPoint(0, 0);
     rectTmp.BottomRight() = CPoint(sizeBig.cx, sizeBig.cy);
     dcCopy.FillRect(&rectTmp, &brushBlack);
@@ -389,8 +420,18 @@ void CGetawayView::InitializeOpenGL() {
     dcCopy.SetTextColor(RGB(color, color, color));
     dcCopy.TextOut(sizeBig.cx, 0, s3);
     pDC->BitBlt(rectWnd.Width() * 2 / 3 - rectWnd.Width() / 20 - sizeBig.cx, 
-                rectWnd.Height() / 2, sizeBig.cx, sizeBig.cy, &dcCopy, 0, 0, SRCCOPY);
-    Sleep(nFadeDelay);
+                rectWnd.Height() / 2, sizeBig.cx, sizeBig.cy, &dcCopy, 0, 0, SRCCOPY);*/
+
+	if (s3.length() > 0) {
+		if(!(surface = TTF_RenderText_Blended(pfont2, s3.c_str(), font_color)))
+			cout << TTF_GetError() << endl;
+		x = vi->current_w * 2 / 3 - vi->current_w / 20 - surface->w;
+		y = vi->current_h / 2;
+		drawSurface(x, y, x + surface->w, y + surface->h, GL_BGRA, surface);
+		SDL_FreeSurface(surface);
+	}
+	
+/*    Sleep(nFadeDelay);
   }
   Sleep(nDelay);
   for(color = 255; color >= 0; color -= 2) {
@@ -424,14 +465,15 @@ void CGetawayView::InitializeOpenGL() {
     pDC->BitBlt(rectWnd.Width() * 2 / 3 - rectWnd.Width() / 20 - sizeBig.cx, 
                 rectWnd.Height() / 2, sizeBig.cx, sizeBig.cy, &dcCopy, 0, 0, SRCCOPY);
     Sleep(nFadeDelay);
-  }
-}*/
+  }*/
+}
 
 
 static double g_cdPI = 3.1415926;
 
-/*void CGetawayView::DrawPlanetGlow(CDC *pDC, int nX, int nY, int nRad) {
-  for(double dAngle = 160.0; dAngle < 300.0; dAngle += 0.03) {
+void CGetawayView::DrawPlanetGlow(double current, int nRad) {
+	double max_angle = 160.0 + (300.0 - 160.0) * current;
+  for(double dAngle = last_angle; dAngle < max_angle && dAngle < 300.0; dAngle += 0.03) {
     double dColor;
     if(dAngle < 200.0) {
       dColor = cos(fabs(dAngle - 200.0) / 40.0 * g_cdPI / 2.0);
@@ -444,8 +486,8 @@ static double g_cdPI = 3.1415926;
     dColor = pow(dColor, 2.0) * 40.0;
     // dColor = 45.0;
 
-    double dX = double(nX) + cos(dAngle / 180.0 * g_cdPI) * double(nRad);
-    double dY = double(nY) + sin(dAngle / 180.0 * g_cdPI) * double(nRad);
+    double dX = 201 + cos(dAngle / 180.0 * g_cdPI) * double(nRad);
+    double dY = 201 + sin(dAngle / 180.0 * g_cdPI) * double(nRad);
 
     // Antialias over 4 pixels
     double d11, d12, d21, d22;
@@ -476,7 +518,7 @@ static double g_cdPI = 3.1415926;
       nY2 = nY1 - 1;
     }
 
-    COLORREF cTmp, cNew;
+    /*COLORREF cTmp, cNew;
     cTmp = pDC->GetPixel(nX1, nY1);
     cNew = RGB(GetRValue(cTmp) + dColor * d11 * dRedF, GetGValue(cTmp) + dColor * d11 * dGreenF, GetBValue(cTmp) + dColor * d11 * dBlueF);
     pDC->SetPixel(nX1, nY1, cNew);
@@ -488,82 +530,153 @@ static double g_cdPI = 3.1415926;
     pDC->SetPixel(nX1, nY2, cNew);
     cTmp = pDC->GetPixel(nX2, nY2);
     cNew = RGB(GetRValue(cTmp) + dColor * d22 * dRedF, GetGValue(cTmp) + dColor * d22 * dGreenF, GetBValue(cTmp) + dColor * d22 * dBlueF);
-    pDC->SetPixel(nX2, nY2, cNew);
+    pDC->SetPixel(nX2, nY2, cNew);*/
+    
+    SDL_Color cTmp, cNew;
+    Uint32 *pixel;
+    pixel = ((Uint32 *)credits_glow->pixels) + (nY1 * credits_glow->w + nX1);
+	SDL_GetRGB(*pixel, credits_glow->format, &cTmp.r, &cTmp.g, &cTmp.b);
+	cNew.r = cTmp.r + dColor * d11 * dRedF;
+	cNew.g = cTmp.g + dColor * d11 * dGreenF;
+	cNew.b = cTmp.b + dColor * d11 * dBlueF;
+	*pixel = SDL_MapRGB(credits_glow->format, cNew.r, cNew.g, cNew.b);
+	
+    pixel = ((Uint32 *)credits_glow->pixels) + (nY2 * credits_glow->w + nX1);
+	SDL_GetRGB(*pixel, credits_glow->format, &cTmp.r, &cTmp.g, &cTmp.b);
+	cNew.r = cTmp.r + dColor * d21 * dRedF;
+	cNew.g = cTmp.g + dColor * d21 * dGreenF;
+	cNew.b = cTmp.b + dColor * d21 * dBlueF;
+	*pixel = SDL_MapRGB(credits_glow->format, cNew.r, cNew.g, cNew.b);
+	
+    pixel = ((Uint32 *)credits_glow->pixels) + (nY1 * credits_glow->w + nX2);
+	SDL_GetRGB(*pixel, credits_glow->format, &cTmp.r, &cTmp.g, &cTmp.b);
+	cNew.r = cTmp.r + dColor * d12 * dRedF;
+	cNew.g = cTmp.g + dColor * d12 * dGreenF;
+	cNew.b = cTmp.b + dColor * d12 * dBlueF;
+	*pixel = SDL_MapRGB(credits_glow->format, cNew.r, cNew.g, cNew.b);
+	
+    pixel = ((Uint32 *)credits_glow->pixels) + (nY2 * credits_glow->w + nX2);
+	SDL_GetRGB(*pixel, credits_glow->format, &cTmp.r, &cTmp.g, &cTmp.b);
+	cNew.r = cTmp.r + dColor * d22 * dRedF;
+	cNew.g = cTmp.g + dColor * d22 * dGreenF;
+	cNew.b = cTmp.b + dColor * d22 * dBlueF;
+	*pixel = SDL_MapRGB(credits_glow->format, cNew.r, cNew.g, cNew.b);
   }
-}*/
+  
+  last_angle = max_angle;
+}
 
 
-
-/*void CGetawayView::TestCredits(CDC* pDC) {
+void CGetawayView::TestCredits() {
+	const SDL_VideoInfo* vi = SDL_GetVideoInfo();
+	int glow_ticks = 200;
+	int text_ticks = 2500;
+	int cur_ticks = SDL_GetTicks() - start_ticks;
+	int max_ticks = 0;
   // create text fonts
-  CFont fontSmall;
+  /*CFont fontSmall;
   CFont fontBig;
   fontSmall.CreatePointFont(140, "Lucida Sans Unicode", pDC);
-  fontBig.CreatePointFont(220, "Arial Black", pDC);
+  fontBig.CreatePointFont(220, "Arial Black", pDC);*/
 
-  CBitmap bmpArt;
-  bmpArt.LoadBitmap(IDB_BITMAP1);
+  //CBitmap bmpArt;
+  //bmpArt.LoadBitmap(IDB_BITMAP1);
 
   // Clear background and draw planet glow
-  CBrush brushBlack(RGB(0, 0, 0));
+  /*CBrush brushBlack(RGB(0, 0, 0));
   CRect rectWnd;
   GetClientRect(&rectWnd);
-  pDC->FillRect(&rectWnd, &brushBlack);
+  pDC->FillRect(&rectWnd, &brushBlack);*/
+  glClear(GL_COLOR_BUFFER_BIT);
 
-  DrawPlanetGlow(pDC, rectWnd.Width() * 1 / 3, rectWnd.Height() / 2 - 100, 250);
+  //DrawPlanetGlow(pDC, rectWnd.Width() * 1 / 3, rectWnd.Height() / 2 - 100, 250);
+	DrawPlanetGlow((cur_ticks / glow_ticks), 200);
+	double x = vi->current_w * 1 / 3 - 201;
+	double y = vi->current_h / 2 - 100 - 201;
+	drawSurface(x, y, x + 300, y + 300, GL_RGBA, credits_glow);
+
+	x = vi->current_w * 2 / 3;
+	y = vi->current_h / 2 - 100;
+	drawSurface(x, y, x + credits_bitmap->w, y + credits_bitmap->h, GL_RGBA, credits_bitmap);
 
   // Draw texts fading in
-  FadeInText(pDC, 
+  /*FadeInText(pDC, 
              "All Programming",
              "(3D, graphics, sounds, physics, UI, terrain, objects)",
              "Mikko Oksalahti",
-             1, 2000, &fontSmall, &fontBig, &bmpArt);
-  if(::GetAsyncKeyState(VK_ESCAPE)) {
+             1, 2000, &fontSmall, &fontBig, &bmpArt);*/
+  max_ticks += glow_ticks;
+  FadeInText("All Programming", "(3D, graphics, sounds, physics, UI, terrain, objects)", "Mikko Oksalahti", cur_ticks - max_ticks, fontSmall, fontBig);
+  /*if(::GetAsyncKeyState(VK_ESCAPE)) {
     return;
   }
   FadeInText(pDC, 
              "Textures and",
              "Sound Samples",
              "Mikko Oksalahti",
-             1, 2000, &fontSmall, &fontBig, &bmpArt);
-  if(::GetAsyncKeyState(VK_ESCAPE)) {
+             1, 2000, &fontSmall, &fontBig, &bmpArt);*/
+  max_ticks += text_ticks;
+  FadeInText("Textures and", "Sound Samples", "Mikko Oksalahti", cur_ticks - max_ticks, fontSmall, fontBig);
+  /*if(::GetAsyncKeyState(VK_ESCAPE)) {
     return;
   }
   FadeInText(pDC, 
              "",
              "Game Menu Music (MixDown3)",
              "Juha Kauppinen",
-             1, 2000, &fontSmall, &fontBig, &bmpArt);
-  if(::GetAsyncKeyState(VK_ESCAPE)) {
+             1, 2000, &fontSmall, &fontBig, &bmpArt);*/
+  max_ticks += text_ticks;
+  FadeInText("", "Game Menu Music (MixDown3)", "Juha Kauppinen", cur_ticks - max_ticks, fontSmall, fontBig);
+  /*if(::GetAsyncKeyState(VK_ESCAPE)) {
     return;
   }
   FadeInText(pDC, 
              "Special Thanks for",
              "Ideas, Technical Support and Game Knowledge",
              "Juha Pomppu",
-             1, 2000, &fontSmall, &fontBig, &bmpArt);
-  if(::GetAsyncKeyState(VK_ESCAPE)) {
+             1, 2000, &fontSmall, &fontBig, &bmpArt);*/
+  max_ticks += text_ticks;
+  FadeInText("Special Thanks for", "Ideas, Technical Support and Game Knowledge", "Juha Pomppu", cur_ticks - max_ticks, fontSmall, fontBig);
+  /*if(::GetAsyncKeyState(VK_ESCAPE)) {
     return;
   }
   FadeInText(pDC, 
              "Special Thanks for",
              "Initial Sparkle",
              "Jyrki Alakuijala",
-             1, 2000, &fontSmall, &fontBig, &bmpArt);
-  if(::GetAsyncKeyState(VK_ESCAPE)) {
+             1, 2000, &fontSmall, &fontBig, &bmpArt);*/
+  max_ticks += text_ticks;
+  FadeInText("Special Thanks for", "Initial Sparkle", "Jyrki Alakuijala", cur_ticks - max_ticks, fontSmall, fontBig);
+  /*if(::GetAsyncKeyState(VK_ESCAPE)) {
     return;
   }
   FadeInText(pDC, 
              "Special Thanks for",
              "Inspiration",
              "Guys Who Did the Homeworld",
-             1, 2000, &fontSmall, &fontBig, &bmpArt);
-  FadeInText(pDC, 
+             1, 2000, &fontSmall, &fontBig, &bmpArt);*/
+  max_ticks += text_ticks;
+  FadeInText("Special Thanks for", "Inspiration", "Guys Who Did the Homeworld", cur_ticks - max_ticks, fontSmall, fontBig);
+  /*FadeInText(pDC, 
              "Special Thanks for",
              "The Pragmatic Sound Library (FMOD)",
              "Firelight Multimedia",
-             1, 2000, &fontSmall, &fontBig, &bmpArt);
-}*/
+             1, 2000, &fontSmall, &fontBig, &bmpArt);*/
+  max_ticks += text_ticks;
+  FadeInText("Special Thanks for", "The Pragmatic Sound Library (FMOD)", "Firelight Multimedia", cur_ticks - max_ticks, fontSmall, fontBig);
+  
+  SDL_GL_SwapBuffers();
+  
+  max_ticks += text_ticks;
+  if (cur_ticks > max_ticks || escape) {
+		SDL_FreeSurface(credits_bitmap);
+		SDL_FreeSurface(credits_glow);
+		TTF_CloseFont(fontSmall);
+		TTF_CloseFont(fontBig);
+		m_pDrawFunction = &CGetawayView::OnDrawStartMenu;
+		SDL_ShowCursor(SDL_ENABLE);
+	}
+}
 
 
 /*int CGetawayView::TypeInText(CDC *pDC, int nWaitms, int nChar, char *sText, bool &rbPauseAWhile) {
@@ -917,23 +1030,26 @@ void CGetawayView::OnDrawIntro() {
 }
 
 
-/*void CGetawayView::OnDrawCredits(CDC* pDC) {
-  HDC hDC = pDC->GetSafeHdc();
-  wglMakeCurrent(hDC, NULL); 
-  ShowCursor(FALSE);
-  while(::GetAsyncKeyState(VK_ESCAPE)); // Flush escape keystrokes
-  TestCredits(pDC);
-  ShowCursor(TRUE);
-  m_pDrawFunction = &CGetawayView::OnDrawStartMenu;
-  m_bDrawOnlyMenu = false;
-  m_bFullRedraw = true;
-  InvalidateRect(NULL);
-}*/
+//void CGetawayView::OnDrawCredits(CDC* pDC) {
+void CGetawayView::OnDrawCredits() {
+  //HDC hDC = pDC->GetSafeHdc();
+  //wglMakeCurrent(hDC, NULL); 
+  //ShowCursor(FALSE);
+  //SDL_ShowCursor(SDL_DISABLE);
+  //while(::GetAsyncKeyState(VK_ESCAPE)); // Flush escape keystrokes
+  TestCredits();
+  //ShowCursor(TRUE);
+  //SDL_ShowCursor(SDL_ENABLE);
+  //m_pDrawFunction = &CGetawayView::OnDrawStartMenu;
+  //m_bDrawOnlyMenu = false;
+  //m_bFullRedraw = true;
+  //InvalidateRect(NULL);
+}
 
 void CGetawayView::OnDrawStartMenu() {
 	const SDL_VideoInfo* vi = SDL_GetVideoInfo();
 
-	glViewport(0, 0, (GLint) vi->current_w, (GLint) vi->current_h);
+	/*glViewport(0, 0, (GLint) vi->current_w, (GLint) vi->current_h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(0, vi->current_w, vi->current_h, 0, 0, 1);
@@ -958,13 +1074,18 @@ void CGetawayView::OnDrawStartMenu() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	
-	glBindTexture(GL_TEXTURE_2D, texture[0]);
+	glBindTexture(GL_TEXTURE_2D, texture[0]);*/
 	
 	double x1 = vi->current_w / 2 - 470/2;
 	double y1 = vi->current_h / 2 - 226;
 	double x2 = x1 + 470;
 	double y2 = y1 + 226;
-	glBegin(GL_QUADS);
+	
+	glClear(GL_COLOR_BUFFER_BIT);
+	
+	drawSurface(x1, y1, x2, y2, GL_BGR, surface_start_menu_head);
+	
+	/*glBegin(GL_QUADS);
 	
 	glTexCoord2f(0.0f, 0.0f);
 	glVertex2f(x1, y1);
@@ -976,43 +1097,31 @@ void CGetawayView::OnDrawStartMenu() {
 	glVertex2f(x1, y2);
 	glEnd();
 	
-	glDeleteTextures(1, &texture[0]);
+	glDeleteTextures(1, &texture[0]);*/
+	
+	
 	
 	// Draw copyright
-	SDL_Surface *TextureImage[1];
+	SDL_Surface *surface;
 	SDL_Color color = {100, 100, 100};
 
-	if(!(TextureImage[0] = TTF_RenderText_Blended(copyright_font, "© 2001 Mikko Oksalahti a.k.a. Metal Oxide. Visit www.nic.fi\\~moxide for latest version.", color)))
+	if(!(surface = TTF_RenderText_Blended(copyright_font, "© 2001 Mikko Oksalahti a.k.a. Metal Oxide. Visit www.nic.fi\\~moxide for latest version.", color)))
 		cout << TTF_GetError() << endl;	
 	
-	glGenTextures(1, &texture[0]);
+	/*glGenTextures(1, &texture[0]);
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TextureImage[0]->w, TextureImage[0]->h, 0, GL_BGRA, GL_UNSIGNED_BYTE, TextureImage[0]->pixels);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);*/
 	
-	x1 = vi->current_w / 2 - TextureImage[0]->w / 2;
-	y1 = vi->current_h - 2 * TextureImage[0]->h;
-	x2 = x1 + TextureImage[0]->w;
-	y2 = y1 + TextureImage[0]->h;
+	x1 = vi->current_w / 2 - surface->w / 2;
+	y1 = vi->current_h - 2 * surface->h;
+	x2 = x1 + surface->w;
+	y2 = y1 + surface->h;
 	
-	SDL_FreeSurface(TextureImage[0]);
+	drawSurface(x1, y1, x2, y2, GL_BGRA, surface);
 	
-	glBindTexture(GL_TEXTURE_2D, texture[0]);
-	
-	glBegin(GL_QUADS);
-	//glColor3f(0.0, 0.0, 0.0);
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex2f(x1, y1);
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex2f(x2, y1);
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex2f(x2, y2);
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex2f(x1, y2);
-	glEnd();
-	
-	glDeleteTextures(1, &texture[0]);
+	SDL_FreeSurface(surface);
 
 	// Draw menu items
 	DrawMenuItem(menu_font, 0, 0, "Begin", (SDL_Color) {9*2/3, 115*2/3, 12*2/3}, vi);
@@ -1146,7 +1255,7 @@ void CGetawayView::OnDrawStartMenu() {
 void CGetawayView::DrawMenuItem(TTF_Font *font, int m, int nY, string text, SDL_Color color, const SDL_VideoInfo* vi)
 {
 	GLuint texture[1];
-	SDL_Surface *TextureImage[1];
+	SDL_Surface *surface;
 	
 	if(m_miMenu[m].m_nLight > 0) {
 		double dRed, dGreen, dBlue;
@@ -1167,38 +1276,17 @@ void CGetawayView::DrawMenuItem(TTF_Font *font, int m, int nY, string text, SDL_
 		color = {dRed, dGreen, dBlue};
 	}
 	
-	//SDL_Color textColor = {9*2/3, 115*2/3, 12*2/3};
-	if(!(TextureImage[0] = TTF_RenderText_Blended(font, text.c_str(), color)))
+	if(!(surface = TTF_RenderText_Blended(font, text.c_str(), color)))
 		cout << TTF_GetError() << endl;
-
-	glGenTextures(1, &texture[0]);
-	glBindTexture(GL_TEXTURE_2D, texture[0]);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TextureImage[0]->w, TextureImage[0]->h, 0, GL_BGRA, GL_UNSIGNED_BYTE, TextureImage[0]->pixels);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	
-	double x1 = vi->current_w / 2 - TextureImage[0]->w / 2;
-	double y1 = vi->current_h / 2 + TextureImage[0]->h * nY;
-	double x2 = x1 + TextureImage[0]->w;
-	double y2 = y1 + TextureImage[0]->h;
+	double x1 = vi->current_w / 2 - surface->w / 2;
+	double y1 = vi->current_h / 2 + surface->h * nY;
+	double x2 = x1 + surface->w;
+	double y2 = y1 + surface->h;
 	
-	SDL_FreeSurface(TextureImage[0]);
+	drawSurface(x1, y1, x2, y2, GL_BGRA, surface);
 	
-	glBindTexture(GL_TEXTURE_2D, texture[0]);
-	
-	glBegin(GL_QUADS);
-	//glColor3f(0.0, 0.0, 0.0);
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex2f(x1, y1);
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex2f(x2, y1);
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex2f(x2, y2);
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex2f(x1, y2);
-	glEnd();
-	
-	glDeleteTextures(1, &texture[0]);
+	SDL_FreeSurface(surface);
 	
 	m_miMenu[m].m_rect.SetRect(x1, y1, x2, y2);
 }
@@ -1720,7 +1808,10 @@ void CGetawayView::OnLButtonDown(int x, int y) {
           break;
         case 4:
           // Credits
-          //m_pDrawFunction = &CGetawayView::OnDrawCredits;          
+          loadCredits();
+          SDL_ShowCursor(SDL_DISABLE);
+          escape = false;
+          m_pDrawFunction = &CGetawayView::OnDrawCredits;
           //InvalidateRect(NULL);
           break;
         case 5:
@@ -1770,60 +1861,63 @@ void CGetawayView::drawDialogs() {
 			  SDL_ShowCursor(SDL_DISABLE);
 		  }
 		} else {
-			glViewport(0, 0, (GLint) vi->current_w, (GLint) vi->current_h);
-			glMatrixMode(GL_PROJECTION);
-			glLoadIdentity();
-			glOrtho(0, vi->current_w, vi->current_h, 0, 0, 1);
-			glDisable(GL_DEPTH_TEST);
-			glMatrixMode(GL_MODELVIEW);
-			glLoadIdentity();
-			glClearColor(0.0, 0.0, 0.0, 1.0);
-
-			//glClear(GL_COLOR_BUFFER_BIT);
-			glEnable(GL_TEXTURE_2D);
-			glEnable(GL_BLEND);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-			OpenGLHelpers::SetColorFull(1, 1, 1, 1);
-
-			GLuint texture[1];
-			SDL_Surface *TextureImage[1];
-			TextureImage[0] = (*i)->getSurface();
-			glGenTextures(1, &texture[0]);
-			glBindTexture(GL_TEXTURE_2D, texture[0]);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TextureImage[0]->w, TextureImage[0]->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, TextureImage[0]->pixels);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
+			SDL_Surface *surface = (*i)->getSurface();
 			SDL_Rect *r = (*i)->getPos();
 			if ((*i)->isDefaultPos()) {
-				r->x = vi->current_w / 2 - TextureImage[0]->w / 2;
-				r->y = vi->current_h / 2 - TextureImage[0]->h / 2;
+				r->x = vi->current_w / 2 - surface->w / 2;
+				r->y = vi->current_h / 2 - surface->h / 2;
 			}
 			double x1 = r->x;
 			double y1 = r->y;
 			double x2 = r->x + r->w;
 			double y2 = r->y + r->h;
-
-			//SDL_FreeSurface(TextureImage[0]);
-
-			glBindTexture(GL_TEXTURE_2D, texture[0]);
-
-			glBegin(GL_QUADS);
-			//glColor3f(0.0, 0.0, 0.0);
-			glTexCoord2f(0.0f, 0.0f);
-			glVertex2f(x1, y1);
-			glTexCoord2f(1.0f, 0.0f);
-			glVertex2f(x2, y1);
-			glTexCoord2f(1.0f, 1.0f);
-			glVertex2f(x2, y2);
-			glTexCoord2f(0.0f, 1.0f);
-			glVertex2f(x1, y2);
-			glEnd();
-
-			glDeleteTextures(1, &texture[0]);
+			
+			drawSurface(x1, y1, x2, y2, GL_RGBA, surface);
 		}
 	}
+}
+
+void CGetawayView::drawSurface(double x1, double y1, double x2, double y2, GLenum format, SDL_Surface *surface) {
+	const SDL_VideoInfo* vi = SDL_GetVideoInfo();
+	
+	glViewport(0, 0, (GLint) vi->current_w, (GLint) vi->current_h);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0, vi->current_w, vi->current_h, 0, 0, 1);
+	glDisable(GL_DEPTH_TEST);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glClearColor(0.0, 0.0, 0.0, 1.0);
+
+	//glClear(GL_COLOR_BUFFER_BIT);
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	OpenGLHelpers::SetColorFull(1, 1, 1, 1);
+
+	GLuint texture[1];
+	glGenTextures(1, &texture[0]);
+	glBindTexture(GL_TEXTURE_2D, texture[0]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surface->w, surface->h, 0, format, GL_UNSIGNED_BYTE, surface->pixels);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glBindTexture(GL_TEXTURE_2D, texture[0]);
+
+	glBegin(GL_QUADS);
+	//glColor3f(0.0, 0.0, 0.0);
+	glTexCoord2f(0.0f, 0.0f);
+	glVertex2f(x1, y1);
+	glTexCoord2f(1.0f, 0.0f);
+	glVertex2f(x2, y1);
+	glTexCoord2f(1.0f, 1.0f);
+	glVertex2f(x2, y2);
+	glTexCoord2f(0.0f, 1.0f);
+	glVertex2f(x1, y2);
+	glEnd();
+
+	glDeleteTextures(1, &texture[0]);
 }
 
 void CGetawayView::loadStartMenu() {
@@ -1835,7 +1929,7 @@ void CGetawayView::loadStartMenu() {
 	if (!copyright_font)
 		cout << "TTF_OpenFont is broken!" << endl;
 		
-	menu_font = TTF_OpenFont("/usr/share/fonts/TTF/impact.ttf", 26);
+	menu_font = TTF_OpenFont("/usr/share/fonts/TTF/impact.ttf", 26); // size == 200
 	if (!menu_font)
 		cout << "TTF_OpenFont is broken!" << endl;
 	//TTF_CloseFont(menu_font);
@@ -1844,4 +1938,23 @@ void CGetawayView::loadStartMenu() {
 	OpenGLHelpers::CreateMipMaps(tex_start_menu_head, tex_s->w, tex_s->h, 3);
 	OpenGLHelpers::DefineMipMapTextures(tex_s->w, tex_s->h, 3, GL_BGR, tex_start_menu_head, 11);*/
 	//SDL_FreeSurface(tex_s);
+}
+
+void CGetawayView::loadCredits() {
+	last_angle = 160.0;
+	int width = 300;
+	int height = 300;
+	credits_glow = SDL_CreateRGBSurface(SDL_HWSURFACE, width, height, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
+	
+	SDL_Surface *val = SDL_LoadBMP("res/bitmap1.bmp");
+	if (val == NULL)
+		cout << "Cannot load file!" << endl;
+	credits_bitmap = SDL_CreateRGBSurface(SDL_HWSURFACE, val->w, val->h, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
+	SDL_BlitSurface(val, NULL, credits_bitmap, NULL);
+	
+	fontSmall = TTF_OpenFont("/usr/share/fonts/TTF/FreeSans.ttf", 18);
+	fontBig = TTF_OpenFont("/usr/share/fonts/TTF/ariblk.ttf", 29);
+	if (!fontSmall && !fontBig)
+		cout << "TTF_OpenFont is broken!" << endl;
+	start_ticks = SDL_GetTicks();
 }

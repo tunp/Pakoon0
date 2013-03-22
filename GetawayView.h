@@ -69,14 +69,16 @@ public:
 
   void DrawMenuItem(CDC* pDC, CFont *pFont, int m, int nY, CString sText, COLORREF color, CRect rectWnd);*/
   void DrawMenuItem(TTF_Font *font, int m, int nY, string text, SDL_Color textColor, const SDL_VideoInfo* vi);
-  /*void DrawPlanetGlow(CDC *pDC, int nX, int nY, int nRad);
-  void FadeInText(CDC *pDC, CString s1, CString s2, CString s3,
-                  int nFadeDelay, int nDelay, 
-                  CFont *pfont1, CFont *pfont2,
-                  CBitmap *pbmpArt);
-  int TypeInText(CDC *pDC, int nWaitms, int nChar, char *sText, bool &rbPauseAWhile);
+  //void DrawPlanetGlow(CDC *pDC, int nX, int nY, int nRad);
+  void DrawPlanetGlow(double current, int nRad);
+  //void FadeInText(CDC *pDC, CString s1, CString s2, CString s3,
+  //                int nFadeDelay, int nDelay, 
+  //                CFont *pfont1, CFont *pfont2,
+  //                CBitmap *pbmpArt);
+	void FadeInText(string s1, string s2, string s3, int ticks, TTF_Font *pfont1, TTF_Font *pfont2);
+  //int TypeInText(CDC *pDC, int nWaitms, int nChar, char *sText, bool &rbPauseAWhile);
 
-  void TestCredits(CDC* pDC);*/
+  void TestCredits();
 
   void Load43AATexture();
   void Draw43AAInPhase(double dPhase);
@@ -88,6 +90,7 @@ public:
   //void OnDrawIntro(CDC* pDC);
   void OnDrawIntro();
   //void OnDrawCredits(CDC* pDC);
+  void OnDrawCredits();
   //void OnDrawStartMenu(CDC* pDC);
   void OnDrawStartMenu();
   //void OnDrawGame(CDC* pDC);
@@ -157,12 +160,22 @@ public:
   
   void drawDialogs();
   
+  void drawSurface(double x1, double y1, double x2, double y2, GLenum format, SDL_Surface *surface);
+  
   bool escape;
   
   SDL_Surface *surface_start_menu_head;
   TTF_Font *copyright_font;
   TTF_Font *menu_font;
   void loadStartMenu();
+  
+  double last_angle;
+  SDL_Surface *credits_glow;
+  SDL_Surface *credits_bitmap;
+  TTF_Font *fontSmall;
+  TTF_Font *fontBig;
+  int start_ticks;
+  void loadCredits();
 };
 
 /*#ifndef _DEBUG  // debug version in GetawayView.cpp
