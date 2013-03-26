@@ -6,11 +6,11 @@
 
 #include "GetawayDoc.h"
 
-#ifdef _DEBUG
+/*#ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
-#endif
+#endif*/
 
 /////////////////////////////////////////////////////////////////////////////
 // CGetawayDoc
@@ -68,7 +68,7 @@ CGetawayDoc::~CGetawayDoc()
 /////////////////////////////////////////////////////////////////////////////
 // CGetawayDoc diagnostics
 
-#ifdef _DEBUG
+/*#ifdef _DEBUG
 void CGetawayDoc::AssertValid() const
 {
 	CDocument::AssertValid();
@@ -78,7 +78,7 @@ void CGetawayDoc::Dump(CDumpContext& dc) const
 {
 	CDocument::Dump(dc);
 }
-#endif //_DEBUG
+#endif //_DEBUG*/
 
 /////////////////////////////////////////////////////////////////////////////
 // CGetawayDoc commands

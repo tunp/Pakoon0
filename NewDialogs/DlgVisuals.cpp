@@ -9,6 +9,8 @@ using namespace std;
 #include <SDL/SDL_image.h>
 #include <SDL/SDL_ttf.h>
 
+#include "../SDLHelpers.h"
+
 #include "Item.h"
 #include "Dialog.h"
 #include "Button.h"
@@ -58,18 +60,18 @@ DlgVisuals::DlgVisuals(CGetawayView *pView) : Dialog() {
 		}
 	}
 
-	Item *item = new DropDownList(list, &pView->dialogs, (SDL_Rect) {207, 79, 233, 25});
+	Item *item = new DropDownList(list, &pView->dialogs, getRect(207, 79, 233, 25));
 	if (selected >= 0)
 		((DropDownList *)item)->setSelected(selected);
 	else
 		cout << "No current resolution found!" << endl;
 	addItem(item);
 	
-	item = new ButtonGroup((SDL_Rect) {207, 110, 235, 27});
+	item = new ButtonGroup(getRect(207, 110, 235, 27));
 	
 	for (int x = 0; x < 3; x++) {
 		string values[] = {"Lame", "Medium", "High"};
-		Button *button = new Button(values[x], (SDL_Color) {0xF0, 0xF0, 0xF0}, (SDL_Rect) {x * 79, 0, 77, 27});
+		Button *button = new Button(values[x], getColor(0xF0, 0xF0, 0xF0), getRect(x * 79, 0, 77, 27));
 		button->setSelected(x == m_rbSkyDetail);
 		((ButtonGroup *)item)->addItem(button);
 	}
@@ -77,11 +79,11 @@ DlgVisuals::DlgVisuals(CGetawayView *pView) : Dialog() {
 	((ButtonGroup *)item)->setValueChangedFunc(skyChangeCallback, this);
 	addItem(item);
 	
-	item = new ButtonGroup((SDL_Rect) {207, 140, 235, 27});
+	item = new ButtonGroup(getRect(207, 140, 235, 27));
 	
 	for (int x = 0; x < 3; x++) {
 		string values[] = {"Lame", "Medium", "High"};
-		Button *button = new Button(values[x], (SDL_Color) {0xF0, 0xF0, 0xF0}, (SDL_Rect) {x * 79, 0, 77, 27});
+		Button *button = new Button(values[x], getColor(0xF0, 0xF0, 0xF0), getRect(x * 79, 0, 77, 27));
 		button->setSelected(x == m_rbDistantDetail);
 		((ButtonGroup *)item)->addItem(button);
 	}
@@ -89,11 +91,11 @@ DlgVisuals::DlgVisuals(CGetawayView *pView) : Dialog() {
 	((ButtonGroup *)item)->setValueChangedFunc(distantChangeCallback, this);
 	addItem(item);
 	
-	item = new ButtonGroup((SDL_Rect) {207, 169, 235, 27});
+	item = new ButtonGroup(getRect(207, 169, 235, 27));
 	
 	for (int x = 0; x < 2; x++) {
 		string values[] = {"Black&White", "Colors"};
-		Button *button = new Button(values[x], (SDL_Color) {0xF0, 0xF0, 0xF0}, (SDL_Rect) {x * 119, 0, 116, 27});
+		Button *button = new Button(values[x], getColor(0xF0, 0xF0, 0xF0), getRect(x * 119, 0, 116, 27));
 		button->setSelected(x == m_rbColor);
 		((ButtonGroup *)item)->addItem(button);
 	}
@@ -101,11 +103,11 @@ DlgVisuals::DlgVisuals(CGetawayView *pView) : Dialog() {
 	((ButtonGroup *)item)->setValueChangedFunc(colorChangeCallback, this);
 	addItem(item);
 	
-	item = new ButtonGroup((SDL_Rect) {207, 198, 235, 27});
+	item = new ButtonGroup(getRect(207, 198, 235, 27));
 	
 	for (int x = 0; x < 2; x++) {
 		string values[] = {"Fullscreen", "Widescreen"};
-		Button *button = new Button(values[x], (SDL_Color) {0xF0, 0xF0, 0xF0}, (SDL_Rect) {x * 119, 0, 116, 27});
+		Button *button = new Button(values[x], getColor(0xF0, 0xF0, 0xF0), getRect(x * 119, 0, 116, 27));
 		button->setSelected(x == m_rbScreenFormat);
 		((ButtonGroup *)item)->addItem(button);
 	}
@@ -113,11 +115,11 @@ DlgVisuals::DlgVisuals(CGetawayView *pView) : Dialog() {
 	((ButtonGroup *)item)->setValueChangedFunc(screenFormatChangeCallback, this);
 	addItem(item);
 	
-	item = new ButtonGroup((SDL_Rect) {207, 227, 235, 27});
+	item = new ButtonGroup(getRect(207, 227, 235, 27));
 	
 	for (int x = 0; x < 2; x++) {
 		string values[] = {"No", "Yes"};
-		Button *button = new Button(values[x], (SDL_Color) {0xF0, 0xF0, 0xF0}, (SDL_Rect) {x * 119, 0, 116, 27});
+		Button *button = new Button(values[x], getColor(0xF0, 0xF0, 0xF0), getRect(x * 119, 0, 116, 27));
 		button->setSelected(x == m_rbWaterDetail);
 		((ButtonGroup *)item)->addItem(button);
 	}
@@ -125,11 +127,11 @@ DlgVisuals::DlgVisuals(CGetawayView *pView) : Dialog() {
 	((ButtonGroup *)item)->setValueChangedFunc(waterDetailChangeCallback, this);
 	addItem(item);
 	
-	item = new ButtonGroup((SDL_Rect) {207, 257, 235, 27});
+	item = new ButtonGroup(getRect(207, 257, 235, 27));
 	
 	for (int x = 0; x < 3; x++) {
 		string values[] = {"Boxy", "Gritty", "Silky"};
-		Button *button = new Button(values[x], (SDL_Color) {0xF0, 0xF0, 0xF0}, (SDL_Rect) {x * 79, 0, 77, 27});
+		Button *button = new Button(values[x], getColor(0xF0, 0xF0, 0xF0), getRect(x * 79, 0, 77, 27));
 		button->setSelected(x == m_rbTextureSmoothness);
 		((ButtonGroup *)item)->addItem(button);
 	}
@@ -137,11 +139,11 @@ DlgVisuals::DlgVisuals(CGetawayView *pView) : Dialog() {
 	((ButtonGroup *)item)->setValueChangedFunc(textureSmoothnessChangeCallback, this);
 	addItem(item);
 	
-	item = new Button("Yeah", (SDL_Color) {0xB4, 0xC8, 0xB4}, (SDL_Rect) {207, 304, 117, 27});
+	item = new Button("Yeah", getColor(0xB4, 0xC8, 0xB4), getRect(207, 304, 117, 27));
 	((Button *) item)->setButtonFunc(&yeahCallback, (void *)this);
 	addItem(item);
 	
-	item = new Button("No Way", (SDL_Color) {0xC8, 0xB4, 0xB4}, (SDL_Rect) {326, 304, 115, 27});
+	item = new Button("No Way", getColor(0xC8, 0xB4, 0xB4), getRect(326, 304, 115, 27));
 	((Button *) item)->setButtonFunc(&noWayCallback, (void *)this);
 	addItem(item);
 	

@@ -8,6 +8,8 @@ using namespace std;
 #include <SDL/SDL_image.h>
 #include <SDL/SDL_ttf.h>
 
+#include "../SDLHelpers.h"
+
 #include "Item.h"
 #include "Dialog.h"
 #include "Scrollbar.h"
@@ -30,15 +32,15 @@ DlgDropDownList::DlgDropDownList(DropDownList *ddl, SDL_Rect pos, bool add_scrol
 	int listbox_width = pos.w;
 	if (add_scrollbar)
 		listbox_width -= 18;
-	Item *listbox = new Listbox(ddl->getList(), ddl->getListboxItemSize(), (SDL_Rect) {0, 0, listbox_width, ddl->getListboxHeight()});
+	Item *listbox = new Listbox(ddl->getList(), ddl->getListboxItemSize(), getRect(0, 0, listbox_width, ddl->getListboxHeight()));
 	((Listbox *) listbox)->setValueChangedFunc(&listboxValueChangedCallback, (void *)this);
 	
-	Item *item = new Frame((SDL_Rect) {0, 0, listbox_width, pos.h});
+	Item *item = new Frame(getRect(0, 0, listbox_width, pos.h));
 	((Frame *)item)->addItem(listbox);
 	addItem(item);
 	
 	if (add_scrollbar) {
-		item = new Scrollbar(0, ddl->getListboxHeight() - pos.h, 0, (SDL_Rect) {pos.w - 18, 0, 18, pos.h});
+		item = new Scrollbar(0, ddl->getListboxHeight() - pos.h, 0, getRect(pos.w - 18, 0, 18, pos.h));
 		((Scrollbar *) item)->setValueChangedFunc(&scrollbarValueChangedCallback, (void *)this);
 		addItem(item);
 	}

@@ -8,6 +8,8 @@
 #include <SDL/SDL_opengl.h>
 #include <SDL/SDL_ttf.h>
 
+#include "SDLHelpers.h"
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -382,11 +384,10 @@ void CGetawayView::FadeInText(string s1, string s2, string s3, int ticks, TTF_Fo
                 sizeSmall1.cx, sizeSmall1.cy, &dcCopy, 0, 0, SRCCOPY);*/
                 
 	SDL_Surface *surface;
-	SDL_Color font_color = {color, color, color};
 	double x, y;
 	
 	if (s1.length() > 0) {
-		if(!(surface = TTF_RenderText_Blended(pfont1, s1.c_str(), font_color)))
+		if(!(surface = TTF_RenderText_Blended(pfont1, s1.c_str(), getColor(color, color, color))))
 			cout << TTF_GetError() << endl;
 		x = vi->current_w * 2 / 3 - vi->current_w / 20 - surface->w;
 		y = vi->current_h / 2 - surface->h * 2;
@@ -404,7 +405,7 @@ void CGetawayView::FadeInText(string s1, string s2, string s3, int ticks, TTF_Fo
                 sizeSmall2.cx, sizeSmall2.cy, &dcCopy, 0, 0, SRCCOPY);*/
          
     if (s2.length() > 0) {       
-		if(!(surface = TTF_RenderText_Blended(pfont1, s2.c_str(), font_color)))
+		if(!(surface = TTF_RenderText_Blended(pfont1, s2.c_str(), getColor(color, color, color))))
 			cout << TTF_GetError() << endl;
 		x = vi->current_w * 2 / 3 - vi->current_w / 20 - surface->w;
 		y = vi->current_h / 2 - surface->h;
@@ -423,7 +424,7 @@ void CGetawayView::FadeInText(string s1, string s2, string s3, int ticks, TTF_Fo
                 rectWnd.Height() / 2, sizeBig.cx, sizeBig.cy, &dcCopy, 0, 0, SRCCOPY);*/
 
 	if (s3.length() > 0) {
-		if(!(surface = TTF_RenderText_Blended(pfont2, s3.c_str(), font_color)))
+		if(!(surface = TTF_RenderText_Blended(pfont2, s3.c_str(), getColor(color, color, color))))
 			cout << TTF_GetError() << endl;
 		x = vi->current_w * 2 / 3 - vi->current_w / 20 - surface->w;
 		y = vi->current_h / 2;
@@ -1124,13 +1125,13 @@ void CGetawayView::OnDrawStartMenu() {
 	SDL_FreeSurface(surface);
 
 	// Draw menu items
-	DrawMenuItem(menu_font, 0, 0, "Begin", (SDL_Color) {9*2/3, 115*2/3, 12*2/3}, vi);
-	DrawMenuItem(menu_font, 1, 2, "Visuals", (SDL_Color) {5*2/3, 85*2/3, 165*2/3}, vi);
-	DrawMenuItem(menu_font, 2, 3, "Sounds", (SDL_Color) {5*2/3, 85*2/3, 165*2/3}, vi);
-	DrawMenuItem(menu_font, 3, 4, "Controls", (SDL_Color) {5*2/3, 85*2/3, 165*2/3}, vi);
-	DrawMenuItem(menu_font, 4, 5, "Credits", (SDL_Color) {5*2/3, 85*2/3, 165*2/3}, vi);
-	DrawMenuItem(menu_font, 5, 6, "Help", (SDL_Color) {5*2/3, 85*2/3, 165*2/3}, vi);
-	DrawMenuItem(menu_font, 6, 8, "Exit", (SDL_Color) {135*2/3, 0, 0}, vi);
+	DrawMenuItem(menu_font, 0, 0, "Begin", getColor(9*2/3, 115*2/3, 12*2/3), vi);
+	DrawMenuItem(menu_font, 1, 2, "Visuals", getColor(5*2/3, 85*2/3, 165*2/3), vi);
+	DrawMenuItem(menu_font, 2, 3, "Sounds", getColor(5*2/3, 85*2/3, 165*2/3), vi);
+	DrawMenuItem(menu_font, 3, 4, "Controls", getColor(5*2/3, 85*2/3, 165*2/3), vi);
+	DrawMenuItem(menu_font, 4, 5, "Credits", getColor(5*2/3, 85*2/3, 165*2/3), vi);
+	DrawMenuItem(menu_font, 5, 6, "Help", getColor(5*2/3, 85*2/3, 165*2/3), vi);
+	DrawMenuItem(menu_font, 6, 8, "Exit", getColor(135*2/3, 0, 0), vi);
 	
 	drawDialogs();
 	
@@ -1273,7 +1274,9 @@ void CGetawayView::DrawMenuItem(TTF_Font *font, int m, int nY, string text, SDL_
 		if(dGreen > 255.0) {dGreen = 255.0;}
 		if(dBlue > 255.0) {dBlue = 255.0;}
 
-		color = {dRed, dGreen, dBlue};
+		color.r = dRed;
+		color.g = dGreen;
+		color.b = dBlue;
 	}
 	
 	if(!(surface = TTF_RenderText_Blended(font, text.c_str(), color)))

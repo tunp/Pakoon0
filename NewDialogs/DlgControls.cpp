@@ -8,6 +8,8 @@ using namespace std;
 #include <SDL/SDL_image.h>
 #include <SDL/SDL_ttf.h>
 
+#include "../SDLHelpers.h"
+
 #include "Item.h"
 #include "Button.h"
 #include "Dialog.h"
@@ -33,16 +35,16 @@ DlgControls::DlgControls(CGetawayView *pView) : Dialog() {
 	list.push_back("moi");
 	
 	for (int x = 0; x < 9; x++) {
-		DropDownList *ddl = new DropDownList(list, &pView->dialogs, (SDL_Rect) {158, 142 + (x * 25.5), 94, 24});
+		DropDownList *ddl = new DropDownList(list, &pView->dialogs, getRect(158, 142 + (x * 25.5), 94, 24));
 		lists.push_back(ddl);
 		addItem(ddl);
 	}
 	
-	Item *item = new Button("Yeah", (SDL_Color) {0xB4, 0xC8, 0xB4}, (SDL_Rect) {110, 389, 118, 28});
+	Item *item = new Button("Yeah", getColor(0xB4, 0xC8, 0xB4), getRect(110, 389, 118, 28));
 	((Button *) item)->setButtonFunc(&yeahCallback, (void *)this);
 	addItem(item);
 	
-	item = new Button("No Way", (SDL_Color) {0xC8, 0xB4, 0xB4}, (SDL_Rect) {230, 389, 116, 28});
+	item = new Button("No Way", getColor(0xC8, 0xB4, 0xB4), getRect(230, 389, 116, 28));
 	((Button *) item)->setButtonFunc(&noWayCallback, (void *)this);
 	addItem(item);
 	

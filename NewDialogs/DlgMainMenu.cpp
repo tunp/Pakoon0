@@ -8,6 +8,8 @@ using namespace std;
 #include <SDL/SDL_image.h>
 #include <SDL/SDL_ttf.h>
 
+#include "../SDLHelpers.h"
+
 #include "Item.h"
 #include "Button.h"
 #include "Dialog.h"
@@ -31,23 +33,23 @@ DlgMainMenu::DlgMainMenu(CGetawayView *pView) : Dialog() {
 	if (!loadBackground("NewDialogs/menu.png"))
 		cout << "Background open failed!" << endl;
 	
-	Item *item = new Button("Visuals...", (SDL_Color) {0xDC, 0xDC, 0xE6}, (SDL_Rect) {16, 47, 95, 27});
+	Item *item = new Button("Visuals...", getColor(0xDC, 0xDC, 0xE6), getRect(16, 47, 95, 27));
 	((Button *) item)->setButtonFunc(&visualsCallback, (void *)this);
 	addItem(item);
 	
-	item = new Button("Sounds...", (SDL_Color) {0xDC, 0xDC, 0xE6}, (SDL_Rect) {16, 77, 95, 27});
+	item = new Button("Sounds...", getColor(0xDC, 0xDC, 0xE6), getRect(16, 77, 95, 27));
 	((Button *) item)->setButtonFunc(&soundsCallback, (void *)this);
 	addItem(item);
 	
-	item = new Button("Controls...", (SDL_Color) {0xDC, 0xDC, 0xE6}, (SDL_Rect) {16, 106, 95, 27});
+	item = new Button("Controls...", getColor(0xDC, 0xDC, 0xE6), getRect(16, 106, 95, 27));
 	((Button *) item)->setButtonFunc(&controlsCallback, (void *)this);
 	addItem(item);
 	
-	item = new Button("Continue", (SDL_Color) {0xB4, 0xC8, 0xB4}, (SDL_Rect) {16, 135, 95, 27});
+	item = new Button("Continue", getColor(0xB4, 0xC8, 0xB4), getRect(16, 135, 95, 27));
 	((Button *) item)->setButtonFunc(&contCallback, (void *)this);
 	addItem(item);
 	
-	item = new Button("Quit", (SDL_Color) {0xC8, 0xB4, 0xB4}, (SDL_Rect) {16, 178, 95, 27});
+	item = new Button("Quit", getColor(0xC8, 0xB4, 0xB4), getRect(16, 178, 95, 27));
 	((Button *) item)->setButtonFunc(&quitCallback, (void *)this);
 	addItem(item);
 	

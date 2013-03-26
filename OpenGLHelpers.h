@@ -3,8 +3,8 @@
 //
 
 #include "BaseClasses.h"
-#include "GL/gl.h"
-#include "GL/glu.h"
+//#include "GL/gl.h"
+//#include "GL/glu.h"
 
 #define DISPLIST_GROUNDFULLRESBASE1   500
 #define DISPLIST_GROUNDFULLRESBASE2   DISPLIST_GROUNDFULLRESBASE1+18

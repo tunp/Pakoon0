@@ -4,8 +4,8 @@
 
 #include "BCar.h"
 
-#include <GL/gl.h>
-#include <GL/glu.h>
+//#include <GL/gl.h>
+//#include <GL/glu.h>
 #include <cstdio>
 #include "OpenGLHelpers.h"
 //#include "resource.h"

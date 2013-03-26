@@ -8,6 +8,8 @@ using namespace std;
 #include <SDL/SDL_image.h>
 #include <SDL/SDL_ttf.h>
 
+#include "../SDLHelpers.h"
+
 #include "Item.h"
 #include "Button.h"
 #include "Dialog.h"
@@ -30,17 +32,17 @@ DlgSounds::DlgSounds(CGetawayView *pView) : Dialog() {
 	if (!loadBackground("NewDialogs/sounds.png"))
 		cout << "Background open failed!" << endl;
 		
-	Item *item = new Scrollbar(0, 255, SoundModule::GetMenuMusicVolume(), (SDL_Rect) {180, 147, 231, 22});
+	Item *item = new Scrollbar(0, 255, SoundModule::GetMenuMusicVolume(), getRect(180, 147, 231, 22));
 	addItem(item);
 	
-	item = new Scrollbar(0, 255, SoundModule::GetVehicleSoundsVolume(), (SDL_Rect) {180, 179, 231, 22});
+	item = new Scrollbar(0, 255, SoundModule::GetVehicleSoundsVolume(), getRect(180, 179, 231, 22));
 	addItem(item);
 	
-	item = new ButtonGroup((SDL_Rect) {178, 205, 235, 27});
+	item = new ButtonGroup(getRect(178, 205, 235, 27));
 	
 	for (int x = 0; x < 2; x++) {
 		string values[] = {"Lame", "3D"};
-		Button *button = new Button(values[x], (SDL_Color) {0xF0, 0xF0, 0xF0}, (SDL_Rect) {x * 119, 0, 116, 27});
+		Button *button = new Button(values[x], getColor(0xF0, 0xF0, 0xF0), getRect(x * 119, 0, 116, 27));
 		button->setSelected(x == m_rbSoundSpace);
 		((ButtonGroup *)item)->addItem(button);
 	}
@@ -48,11 +50,11 @@ DlgSounds::DlgSounds(CGetawayView *pView) : Dialog() {
 	((ButtonGroup *)item)->setValueChangedFunc(soundSpaceCallback, this);
 	addItem(item);
 	
-	item = new Button("Yeah", (SDL_Color) {0xB4, 0xC8, 0xB4}, (SDL_Rect) {178, 263, 117, 27});
+	item = new Button("Yeah", getColor(0xB4, 0xC8, 0xB4), getRect(178, 263, 117, 27));
 	((Button *) item)->setButtonFunc(&yeahCallback, (void *)this);
 	addItem(item);
 	
-	item = new Button("No Way", (SDL_Color) {0xC8, 0xB4, 0xB4}, (SDL_Rect) {297, 263, 115, 27});
+	item = new Button("No Way", getColor(0xC8, 0xB4, 0xB4), getRect(297, 263, 115, 27));
 	((Button *) item)->setButtonFunc(&noWayCallback, (void *)this);
 	addItem(item);
 	

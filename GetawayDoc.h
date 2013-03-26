@@ -5,9 +5,9 @@
 #if !defined(AFX_GETAWAYDOC_H__73E6FC05_BC82_11D4_B532_0060B0F1F5DD__INCLUDED_)
 #define AFX_GETAWAYDOC_H__73E6FC05_BC82_11D4_B532_0060B0F1F5DD__INCLUDED_
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
+//#if _MSC_VER > 1000
+//#pragma once
+//#endif // _MSC_VER > 1000
 
 #include "BSimulation.h"
 
@@ -40,10 +40,10 @@ public:
 // Implementation
 public:
 	//virtual ~CGetawayDoc();
-#ifdef _DEBUG
+/*#ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
-#endif
+#endif*/
 
 protected:
 

@@ -7,6 +7,8 @@ using namespace std;
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
 
+#include "../SDLHelpers.h"
+
 #include "Item.h"
 #include "Dialog.h"
 #include "DropDownList.h"
@@ -101,7 +103,7 @@ void DropDownList::onMouseRelease(int x, int y) {
 			height = 200;
 			add_scrollbar = true;
 		}
-		dialogs->push_back(new DlgDropDownList(this, (SDL_Rect) {(*i)->getPos()->x + getPos()->x, (*i)->getPos()->y + getPos()->y + getPos()->h, getPos()->w, height}, add_scrollbar));
+		dialogs->push_back(new DlgDropDownList(this, getRect((*i)->getPos()->x + getPos()->x, (*i)->getPos()->y + getPos()->y + getPos()->h, getPos()->w, height), add_scrollbar));
 	}
 	//setSurface(buttonUp);
 	pressed = false;

@@ -5,9 +5,9 @@
 #if !defined(AFX_GETAWAYVIEW_H__73E6FC07_BC82_11D4_B532_0060B0F1F5DD__INCLUDED_)
 #define AFX_GETAWAYVIEW_H__73E6FC07_BC82_11D4_B532_0060B0F1F5DD__INCLUDED_
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
+//#if _MSC_VER > 1000
+//#pragma once
+//#endif // _MSC_VER > 1000
 
 //#include "STRMIF.H"
 //#include "CONTROL.H"
