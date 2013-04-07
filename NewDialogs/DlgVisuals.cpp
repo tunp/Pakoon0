@@ -191,7 +191,7 @@ void DlgVisuals::waterDetailChangeCallback(void *p, ButtonGroup *bg) {
 }
 
 void DlgVisuals::textureSmoothnessChangeCallback(void *p, ButtonGroup *bg) {
-	string values[] = {"No", "Yes"};
+	string values[] = {"Boxy", "Gritty", "Silky"};
 	int x;
 	for (x = 0; bg->getValue() != values[x]; x++);
 	((DlgVisuals *)p)->m_rbTextureSmoothness= x;

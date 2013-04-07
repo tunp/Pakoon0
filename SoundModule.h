@@ -56,7 +56,7 @@ public:
 		}
 		is.close();*/
 		
-		FILE *f = fopen (file.c_str(), "r");
+		FILE *f = fopen (file.c_str(), "rb");
 		OggVorbis_File vf;
 		/*#ifdef _WIN32
 		  _setmode( _fileno( stdin ), _O_BINARY );

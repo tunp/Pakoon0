@@ -1862,19 +1862,19 @@ void CGetawayView::OnLButtonUp(int x, int y) {
 
 void CGetawayView::drawDialogs() {
 	const SDL_VideoInfo* vi = SDL_GetVideoInfo();
-	for (vector<Dialog *>::iterator i = dialogs.begin(); i != dialogs.end(); i++) {
-		if ((*i)->isExit()) {
-		  delete *i;
-		  *i = NULL;
-		  dialogs.erase(i);
-		  i--;
+	for (int x = 0; x < dialogs.size(); x++) {
+		if (dialogs[x]->isExit()) {
+		  delete dialogs[x];
+		  dialogs[x] = NULL;
+		  dialogs.erase(dialogs.begin()+x);
+		  x--;
 		  if (dialogs.size() == 0 && m_pDrawFunction == &CGetawayView::OnDrawGame) {
 			  SDL_ShowCursor(SDL_DISABLE);
 		  }
 		} else {
-			SDL_Surface *surface = (*i)->getSurface();
-			SDL_Rect *r = (*i)->getPos();
-			if ((*i)->isDefaultPos()) {
+			SDL_Surface *surface = dialogs[x]->getSurface();
+			SDL_Rect *r = dialogs[x]->getPos();
+			if (dialogs[x]->isDefaultPos()) {
 				r->x = vi->current_w / 2 - surface->w / 2;
 				r->y = vi->current_h / 2 - surface->h / 2;
 			}
@@ -1970,6 +1970,7 @@ void CGetawayView::loadCredits() {
 	
 	vector<string> fontSmalls;
 	fontSmalls.push_back("FreeSans.ttf");
+	fontSmalls.push_back("l_10646.ttf");
 	fontSmall = openFont(fontSmalls, 18);
 	
 	vector<string> fontBigs;
