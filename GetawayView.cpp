@@ -187,7 +187,14 @@ void CGetawayView::OnCreate()
 	
 	//SDL_Surface* drawContext;
 	//drawContext = SDL_SetVideoMode(1024, 768, 0, SDL_OPENGL);
-	SDL_SetVideoMode(pDoc->GetSimulation()->m_nDispWidth, pDoc->GetSimulation()->m_nDispHeight, 0, SDL_OPENGL | SDL_FULLSCREEN);
+	int width = pDoc->GetSimulation()->m_nDispWidth;
+	int height = pDoc->GetSimulation()->m_nDispHeight;
+	cout << "Trying display mode: " << width << "x" << height << endl;
+	if (SDL_SetVideoMode(width, height, 0, SDL_OPENGL | SDL_FULLSCREEN) == NULL) {
+		cout << "SDL_SetVideoMode: " << SDL_GetError() << endl;
+		exit = true;
+		return;
+	}
 	
 	SDL_WM_SetCaption("Pakoon", NULL);
 

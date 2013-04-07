@@ -228,6 +228,9 @@ void DlgVisuals::yeah() {
   parseResolution(((DropDownList *)items[0])->getString(), w, h);
   
   SDL_SetVideoMode(w, h, 0, SDL_OPENGL | SDL_FULLSCREEN);
+  
+	m_pSimulation->m_nDispWidth  = w;
+	m_pSimulation->m_nDispHeight = h;
 
   g_cbMipMap = (m_rbTextureSmoothness == 2);
   switch(m_rbTextureSmoothness) {

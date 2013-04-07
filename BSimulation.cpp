@@ -120,6 +120,9 @@ BSimulation::BSimulation() {
   m_nDispHeight = devmode.dmPelsHeight;
   m_nDispBits   = devmode.dmBitsPerPel;
   m_nDispHz     = devmode.dmDisplayFrequency;*/
+  m_nDispWidth = 0;
+  m_nDispHeight = 0;
+  m_nDispBits = 0;
 }
 
 BSimulation::~BSimulation() {
