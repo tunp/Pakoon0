@@ -22,5 +22,5 @@ public:
 	void setExit(bool exit);
 	bool isExit();
 	bool isDefaultPos();
-	bool setDefaultPos(bool default_pos);
+	void setDefaultPos(bool default_pos);
 };

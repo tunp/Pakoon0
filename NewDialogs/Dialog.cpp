@@ -91,6 +91,6 @@ bool Dialog::isDefaultPos() {
 	return default_pos;
 }
 
-bool Dialog::setDefaultPos(bool default_pos) {
+void Dialog::setDefaultPos(bool default_pos) {
 	this->default_pos = default_pos;
 }

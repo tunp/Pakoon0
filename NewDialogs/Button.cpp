@@ -6,6 +6,8 @@ using namespace std;
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
 
+#include "../SDLHelpers.h"
+
 #include "Item.h"
 #include "Button.h"
 
@@ -87,7 +89,9 @@ void Button::drawButton() {
 	}
 	
 	SDL_Color text_color = {0, 0, 0};
-	TTF_Font *font = TTF_OpenFont("/usr/share/fonts/TTF/ariblk.ttf", 14);
+	vector<string> fonts;
+	fonts.push_back("ariblk.ttf");
+	TTF_Font *font = openFont(fonts, 14);
 	SDL_Surface *text_surface;
 	if (!font)
 		cout << "TTF_OpenFont is broken!" << endl;

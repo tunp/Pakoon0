@@ -13,6 +13,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <ctime>
 
 using namespace std;
 
@@ -40,11 +41,11 @@ using namespace std;
 #include "SoundModule.h"
 #include "Settings.h"
 
-#ifdef _DEBUG
+/*#ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
-#endif
+#endif*/
 
 extern bool g_cbBlackAndWhite;
 
@@ -1927,12 +1928,17 @@ void CGetawayView::loadStartMenu() {
 	surface_start_menu_head = SDL_LoadBMP("res/MenuFinal.bmp");
 	if (surface_start_menu_head == NULL)
 		cout << "Cannot load file!" << endl;
-		
-	copyright_font = TTF_OpenFont("/usr/share/fonts/TTF/FreeSans.ttf", 16);
+	
+	vector<string> copyright_fonts;
+	copyright_fonts.push_back("FreeSans.ttf");
+	copyright_fonts.push_back("l_10646.ttf");
+	copyright_font = openFont(copyright_fonts, 16);
 	if (!copyright_font)
 		cout << "TTF_OpenFont is broken!" << endl;
-		
-	menu_font = TTF_OpenFont("/usr/share/fonts/TTF/impact.ttf", 26); // size == 200
+	
+	vector<string> menu_fonts;
+	menu_fonts.push_back("impact.ttf");
+	menu_font = openFont(menu_fonts, 26); // size == 200
 	if (!menu_font)
 		cout << "TTF_OpenFont is broken!" << endl;
 	//TTF_CloseFont(menu_font);
@@ -1955,9 +1961,14 @@ void CGetawayView::loadCredits() {
 	credits_bitmap = SDL_CreateRGBSurface(SDL_HWSURFACE, val->w, val->h, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
 	SDL_BlitSurface(val, NULL, credits_bitmap, NULL);
 	
-	fontSmall = TTF_OpenFont("/usr/share/fonts/TTF/FreeSans.ttf", 18);
-	fontBig = TTF_OpenFont("/usr/share/fonts/TTF/ariblk.ttf", 29);
-	if (!fontSmall && !fontBig)
+	vector<string> fontSmalls;
+	fontSmalls.push_back("FreeSans.ttf");
+	fontSmall = openFont(fontSmalls, 18);
+	
+	vector<string> fontBigs;
+	fontBigs.push_back("ariblk.ttf");
+	fontBig = openFont(fontBigs, 29);
+	if (!fontSmall || !fontBig)
 		cout << "TTF_OpenFont is broken!" << endl;
 	start_ticks = SDL_GetTicks();
 }

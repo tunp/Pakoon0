@@ -7,6 +7,8 @@ using namespace std;
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
 
+#include "../SDLHelpers.h"
+
 #include "Item.h"
 #include "Dialog.h"
 #include "Listbox.h"
@@ -46,7 +48,9 @@ void Listbox::drawListbox() {
 		}
 	}
 	
-	TTF_Font *font = TTF_OpenFont("/usr/share/fonts/TTF/ariblk.ttf", 14);
+	vector<string> fonts;
+	fonts.push_back("ariblk.ttf");
+	TTF_Font *font = openFont(fonts, 14);
 	if (!font) 
 		cout << "TTF_OpenFont is broken!" << endl;
 	else {
