@@ -333,7 +333,7 @@ public:
   static void StopJetSound();
 
   static void PlayCrashSound(double dVolume);
-  static void SetCrashSoundVolume(int cha, int nVol);
+  static void SetCrashSoundVolume(int nVol);
 
   static void Initialize();
   static void Close();

@@ -181,7 +181,7 @@ void SoundModule::SetEngineSoundVolume(int nVol) {
   }*/
 }
 
-void SoundModule::SetCrashSoundVolume(int cha, int nVol) {
+void SoundModule::SetCrashSoundVolume(int nVol) {
   int nNewVol = int(double(nVol) * double(m_nVehicleSoundsVolume) / 255.0);
   if(nNewVol > 255) {
     nNewVol = 255;
@@ -554,9 +554,10 @@ void SoundModule::PlayCrashSound(double dVolume) {
     if(sCrashSound.isLoaded()) {
       //m_chaCrashSound = FSOUND_PlaySound(FSOUND_FREE, m_pCrashSound);
       //m_chaCrashSound = Mix_PlayChannel(-1, m_pCrashSound, 0);
+      sCrashSound.setFreq(22050 + rand() % 10000);
+      SetCrashSoundVolume(55 + int(dVolume * 200.0));
       playOnSoundPool(sCrashSound);
       //FSOUND_SetFrequency(m_chaCrashSound, 22050 + rand() % 10000);
-      //SetCrashSoundVolume(m_chaCrashSound, 55 + int(dVolume * 200.0));
     }
   }
 }
