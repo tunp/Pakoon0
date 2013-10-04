@@ -28,6 +28,7 @@ private:
 	int volume;
 	bool loaded;
 	bool playing;
+	bool paused;
 	int play_pos;
 	int channels;
 	int play_freq;
@@ -36,10 +37,34 @@ public:
 	Sound() {
 		loaded = false;
 		playing = false;
+		paused = false;
 		volume = 128;
 		play_pos = 0;
 		play_freq = 44100;
 		loop = true;
+		data = 0;
+	}
+	
+	Sound(const Sound &old) {
+		size = old.size;
+		volume = old.volume;
+		loaded = old.loaded;
+		playing = old.playing;
+		paused = old.paused;
+		play_pos = old.play_pos;
+		channels = old.channels;
+		play_freq = old.play_freq;
+		loop = old.loop;
+		if (loaded) {
+			data = new char[size];
+			memcpy(data, old.data, size);
+		} else {
+			data = 0;
+		}
+	}
+	
+	~Sound() {
+		unloadSound();
 	}
 
 	void loadSound(string file) {
@@ -56,7 +81,7 @@ public:
 		}
 		is.close();*/
 		
-		FILE *f = fopen (file.c_str(), "rb");
+		FILE *f = fopen(file.c_str(), "rb");
 		OggVorbis_File vf;
 		/*#ifdef _WIN32
 		  _setmode( _fileno( stdin ), _O_BINARY );
@@ -64,7 +89,7 @@ public:
 		#endif*/
 		
 		if(ov_open_callbacks(f, &vf, NULL, 0, OV_CALLBACKS_NOCLOSE) < 0) {
-			cout << "Input does not appear to be an Ogg bitstream." << endl;
+			cout << "Input does not appear to be an Ogg bitstream. " << file << endl;
 		} else {
 			char **ptr = ov_comment(&vf,-1)->user_comments;
 			vorbis_info *vi = ov_info(&vf,-1);
@@ -118,9 +143,11 @@ public:
 	}
 	
 	void unloadSound() {
-		delete[] data;
-		loaded = false;
-		playing = false;
+		if (loaded) {
+			delete[] data;
+			loaded = false;
+			playing = false;
+		}
 	}
 	
 	void setVolume(int volume) {
@@ -131,15 +158,27 @@ public:
 		return loaded;
 	}
 	
+	bool isPlaying() {
+		return playing;
+	}
+	
 	void play() {
 		if (!playing) {
-			play_pos = 0;
 			playing = true;
+			if (!paused) {
+				play_pos = 0;
+			}
+			paused = false;
 		}
 	}
 	
 	void stop() {
 		playing = false;
+	}
+	
+	void pause() {
+		playing = false;
+		paused = true;
 	}
 	
 	void setFreq(int play_freq) {
@@ -192,7 +231,7 @@ class SoundModule {
   static bool m_bRunning;
   
 	static Sound sMenuMusic;
-	static Sound sVehicleMusic;
+	static Sound sVehicleSounds;
 	static Sound sEngineSound1;
 	static Sound sEngineSound2;
 	static Sound sMessageSound;
@@ -231,6 +270,10 @@ class SoundModule {
   static int m_nHeliSoundVolume;
   static int m_nJetSoundVolume;
   static int m_nSpace;
+  
+  static SDL_mutex *mix_mutex;
+  static vector<Sound *> playPool;
+  static vector<Sound *> sounds;
 
   //static void FreeSound(Mix_Chunk **pSound);
 
@@ -303,4 +346,6 @@ public:
   //static void frequency(int chan, void *stream, int len, void *udata);
   
   static void mix(void *userdata, Uint8 *stream, int len);
+  static void mixOne(Sound *sound, Uint8 *stream, int len);
+  static void playOnSoundPool(Sound &sound);
 };
