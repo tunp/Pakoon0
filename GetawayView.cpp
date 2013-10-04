@@ -860,6 +860,7 @@ void CGetawayView::OnDrawIntro() {
   // Draw 43% Artificial Adrenaline sequence
   if(nPhase == 0) {
     //ShowCursor(FALSE);
+    SDL_ShowCursor(SDL_DISABLE);
     //while(::GetAsyncKeyState(VK_ESCAPE)); // Flush escape keystrokes
     escape = false;
 
