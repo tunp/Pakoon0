@@ -4,7 +4,6 @@
 
 //#include "stdafx.h"
 #include <iostream>
-#include <ctime>
 
 using namespace std;
 
@@ -536,10 +535,10 @@ void SoundModule::SetJetSoundPhase(double dPhase) {
 
 
 void SoundModule::PlayCrashSound(double dVolume) {
-  static clock_t clockPrev = clock();
-  clock_t clockNow = clock();
+  static unsigned int clockPrev = SDL_GetTicks();
+  unsigned int clockNow = SDL_GetTicks();
   if(m_bRunning && 
-     ((double(clockNow - clockPrev) / double(CLOCKS_PER_SEC)) > 0.02) && 
+     ((double(clockNow - clockPrev) / 1000.0) > 0.02) && 
      (dVolume > 0.1)) {
     if(dVolume > 1.0) {
       dVolume = 1.0;
