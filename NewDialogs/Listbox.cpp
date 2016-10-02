@@ -50,6 +50,8 @@ void Listbox::drawListbox() {
 	
 	vector<string> fonts;
 	fonts.push_back("ariblk.ttf");
+	fonts.push_back("FreeSans.ttf");
+	fonts.push_back("DejaVuSans.ttf");
 	TTF_Font *font = openFont(fonts, 14);
 	if (!font) 
 		cout << "TTF_OpenFont is broken!" << endl;

@@ -65,6 +65,8 @@ void DropDownList::drawDropDownList() {
 	SDL_Color text_color = {0, 0, 0};
 	vector<string> fonts;
 	fonts.push_back("ariblk.ttf");
+	fonts.push_back("FreeSans.ttf");
+	fonts.push_back("DejaVuSans.ttf");
 	TTF_Font *font = openFont(fonts, 14);
 	SDL_Surface *text_surface;
 	if (!font)

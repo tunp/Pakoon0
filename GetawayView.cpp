@@ -13,7 +13,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <ctime>
 
 using namespace std;
 
@@ -853,7 +852,7 @@ void CGetawayView::OnDrawIntro() {
   static int nPhase = 0;
   static int nChar = 0;
   static int nCountDown = 30;
-  static clock_t clockStart;
+  static unsigned int clockStart;
 
   // Draw Metal Oxide logo sequence
 
@@ -869,13 +868,13 @@ void CGetawayView::OnDrawIntro() {
     nPhase = 1;
 
     // Record (music) start time
-    clockStart = clock();
+    clockStart = SDL_GetTicks();
 
     //InvalidateRect(NULL);
   } else {
     // Draw 43aa text polygons in correct position
-    clock_t clockNow = clock();
-    double dPhase = double(clockNow - clockStart) / double(CLOCKS_PER_SEC) / 12.0;
+    unsigned int clockNow = SDL_GetTicks();
+    double dPhase = double(clockNow - clockStart) / 1000.0 / 12.0;
 
     Draw43AAInPhase(dPhase);
 
@@ -1354,11 +1353,11 @@ double g_dRate = 60.0;
 //void CGetawayView::OnDrawGame(CDC* pDC) {
 void CGetawayView::OnDrawGame() {
   static int nFrameNo = 0;
-  static clock_t clockLastCheckPoint = clock();
+  static unsigned int clockLastCheckPoint = SDL_GetTicks();
   static string sRate = "";
 
   if(m_bInitClock) {
-    clockLastCheckPoint = clock();
+    clockLastCheckPoint = SDL_GetTicks();
     m_bInitClock = false;
   }
 
@@ -1426,9 +1425,9 @@ void CGetawayView::OnDrawGame() {
   // Calculate and draw framerate
   if(++nFrameNo == 10) {
 
-    clock_t clockNow = clock();
+    unsigned int clockNow = SDL_GetTicks();
     //g_dRate = 10.0 / (double(clockNow - (clockLastCheckPoint + m_nMenuTime)) / double(CLOCKS_PER_SEC));
-    g_dRate = 10.0 / (double(clockNow - (clockLastCheckPoint)) / double(CLOCKS_PER_SEC));
+    g_dRate = 10.0 / (double(clockNow - (clockLastCheckPoint)) / 1000.0);
     /*if(m_nMenuTime) {
       m_nMenuTime = 0;
     }*/
@@ -1531,7 +1530,7 @@ void CGetawayView::OnKeyDown(int nChar) {
   //CGetawayDoc* pDoc = GetDocument();
   // Check for user input
   //DlgMainMenu dialogMenu;
-  clock_t clockStart;
+  unsigned int clockStart;
 
   if(pDoc->GetSimulation()->GetCamera()->m_bNeedsToBeInitialized) {
     pDoc->GetSimulation()->GetCamera()->m_locMode = BCamera::FOLLOW;
@@ -1939,6 +1938,7 @@ void CGetawayView::loadStartMenu() {
 	
 	vector<string> copyright_fonts;
 	copyright_fonts.push_back("FreeSans.ttf");
+	copyright_fonts.push_back("DejaVuSans.ttf");
 	copyright_fonts.push_back("l_10646.ttf");
 	copyright_font = openFont(copyright_fonts, 16);
 	if (!copyright_font)
@@ -1946,6 +1946,8 @@ void CGetawayView::loadStartMenu() {
 	
 	vector<string> menu_fonts;
 	menu_fonts.push_back("impact.ttf");
+	menu_fonts.push_back("FreeSans.ttf");
+	menu_fonts.push_back("DejaVuSans.ttf");
 	menu_font = openFont(menu_fonts, 26); // size == 200
 	if (!menu_font)
 		cout << "TTF_OpenFont is broken!" << endl;
@@ -1971,11 +1973,14 @@ void CGetawayView::loadCredits() {
 	
 	vector<string> fontSmalls;
 	fontSmalls.push_back("FreeSans.ttf");
+	fontSmalls.push_back("DejaVuSans.ttf");
 	fontSmalls.push_back("l_10646.ttf");
 	fontSmall = openFont(fontSmalls, 18);
 	
 	vector<string> fontBigs;
 	fontBigs.push_back("ariblk.ttf");
+	fontBigs.push_back("FreeSans.ttf");
+	fontBigs.push_back("DejaVuSans.ttf");
 	fontBig = openFont(fontBigs, 29);
 	if (!fontSmall || !fontBig)
 		cout << "TTF_OpenFont is broken!" << endl;
