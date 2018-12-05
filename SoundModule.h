@@ -130,8 +130,8 @@ public:
 					cvt.len = size;
 					memcpy(cvt.buf, data, size);
 					delete[] data;
-					size *= cvt.len_mult;
 					SDL_ConvertAudio(&cvt);
+					size = cvt.len_cvt;
 					data = (char *)cvt.buf;
 					
 					loaded = true;
