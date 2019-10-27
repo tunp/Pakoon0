@@ -61,6 +61,8 @@ public:
 
   BMenuItem m_miMenu[7];
 
+  int window_width, window_height;
+
   /*GLFont  m_glfont;
   HGLRC   m_hGLRC;
   clock_t m_nMenuTime; // Time spent viewing menu
@@ -68,7 +70,7 @@ public:
   int     m_chaMenuMusic; // Channel for the menu background music
 
   void DrawMenuItem(CDC* pDC, CFont *pFont, int m, int nY, CString sText, COLORREF color, CRect rectWnd);*/
-  void DrawMenuItem(TTF_Font *font, int m, int nY, string text, SDL_Color textColor, const SDL_VideoInfo* vi);
+  void DrawMenuItem(TTF_Font *font, int m, int nY, string text, SDL_Color textColor);
   //void DrawPlanetGlow(CDC *pDC, int nX, int nY, int nRad);
   void DrawPlanetGlow(double current, int nRad);
   //void FadeInText(CDC *pDC, CString s1, CString s2, CString s3,
@@ -176,6 +178,11 @@ public:
   TTF_Font *fontBig;
   int start_ticks;
   void loadCredits();
+  SDL_Window *window;
+
+  void setWindow(SDL_Window *window) {
+    this->window = window;
+  }
 };
 
 /*#ifndef _DEBUG  // debug version in GetawayView.cpp

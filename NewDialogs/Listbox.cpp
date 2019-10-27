@@ -4,8 +4,8 @@
 
 using namespace std;
 
-#include <SDL/SDL.h>
-#include <SDL/SDL_ttf.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 #include "../SDLHelpers.h"
 
@@ -17,7 +17,7 @@ Listbox::Listbox(vector<string> list, int item_size, SDL_Rect pos) : Item(pos) {
 	this->list = list;
 	this->item_size = item_size;
 	selected = 1;
-	setSurface(SDL_CreateRGBSurface(SDL_HWSURFACE, getPos()->w, getPos()->h, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000));
+	setSurface(SDL_CreateRGBSurface(0, getPos()->w, getPos()->h, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000));
 	drawListbox();
 }
 

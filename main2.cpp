@@ -2,9 +2,9 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <SDL/SDL.h>
-#include <SDL/SDL_opengl.h>
-#include <SDL/SDL_ttf.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_opengl.h>
+#include <SDL2/SDL_ttf.h>
 
 using namespace std;
 
@@ -18,8 +18,31 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-	CGetawayView gw;
+	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+		cout << "SDL init failed" << endl;
+		return 1;
+	}
+
+	if(TTF_Init() == -1) {
+		cout << "TTF_Init: " << TTF_GetError() << endl;
+		return 1;
+	}
+
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
 	
+	SDL_Window *window = SDL_CreateWindow("Pakoon", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 0, 0, SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP);
+	if (window == NULL) {
+		cout << "error creating window" << endl;
+		return 0;
+	}
+	SDL_GLContext context = SDL_GL_CreateContext(window);
+	
+	SDL_GL_SetSwapInterval(0);
+	
+	CGetawayView gw;
+	gw.setWindow(window);
+	SDL_GetWindowSize(window, &gw.window_width, &gw.window_height);
 	gw.OnCreate();
 	
 	while (!gw.exit)
@@ -50,6 +73,8 @@ int main(int argc, char *argv[])
 	}
 	
 	TTF_Quit();
+	SDL_GL_DeleteContext(context);
+	SDL_DestroyWindow(window);
 	SDL_Quit();
 	
 	return 0;

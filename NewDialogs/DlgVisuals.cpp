@@ -5,9 +5,9 @@
 
 using namespace std;
 
-#include <SDL/SDL.h>
-#include <SDL/SDL_image.h>
-#include <SDL/SDL_ttf.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 
 #include "../SDLHelpers.h"
 
@@ -48,14 +48,14 @@ DlgVisuals::DlgVisuals(CGetawayView *pView) : Dialog() {
 		
 	vector<string> list;
 	int selected = -1;
-	const SDL_VideoInfo* vi = SDL_GetVideoInfo();
-	SDL_Rect** modes = SDL_ListModes(NULL, SDL_FULLSCREEN);
-	if (modes > (SDL_Rect**) 0) {
-		for (int x = 0; modes[x]; x++) {
+	int nModes = SDL_GetNumDisplayModes(0); //FIXME always 0 display
+	for (int x = 0; x < nModes; x++) {
+		SDL_DisplayMode mode;
+		if (SDL_GetDisplayMode(0, x, &mode) >= 0) {
 			stringstream ss;
-			ss << modes[x]->w << "x" << modes[x]->h;
+			ss << mode.w << "x" << mode.h;
 			list.push_back(ss.str());
-			if (modes[x]->w == vi->current_w && modes[x]->h == vi->current_h)
+			if (mode.w == pView->window_width && mode.h == pView->window_height)
 				selected = x;
 		}
 	}
@@ -227,7 +227,7 @@ void DlgVisuals::yeah() {
   int h;
   parseResolution(((DropDownList *)items[0])->getString(), w, h);
   
-  SDL_SetVideoMode(w, h, 0, SDL_OPENGL | SDL_FULLSCREEN);
+  //SDL_SetVideoMode(w, h, 0, SDL_OPENGL | SDL_FULLSCREEN); // we are currently always using desktop resolution so no need to change
   
 	m_pSimulation->m_nDispWidth  = w;
 	m_pSimulation->m_nDispHeight = h;

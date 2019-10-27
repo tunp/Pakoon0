@@ -4,9 +4,9 @@
 
 using namespace std;
 
-#include <SDL/SDL.h>
-#include <SDL/SDL_image.h>
-#include <SDL/SDL_ttf.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 
 #include "../SDLHelpers.h"
 
@@ -24,10 +24,9 @@ DlgDropDownList::DlgDropDownList(DropDownList *ddl, SDL_Rect pos, bool add_scrol
 	this->pos = pos;
 	setDefaultPos(false);
 
-	background = SDL_CreateRGBSurface(SDL_HWSURFACE, pos.w, pos.h, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
+	background = SDL_CreateRGBSurface(0, pos.w, pos.h, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
 	memset((int *) background->pixels, 0xFFFFFFFF, pos.w * pos.h * 4);
-	surface = SDL_CreateRGBSurface(SDL_HWSURFACE, background->w, background->h, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
-	SDL_SetAlpha(background, 0, 0);
+	surface = SDL_CreateRGBSurface(0, background->w, background->h, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
 	
 	int listbox_width = pos.w;
 	if (add_scrollbar)

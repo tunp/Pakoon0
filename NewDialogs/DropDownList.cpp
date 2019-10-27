@@ -4,8 +4,8 @@
 
 using namespace std;
 
-#include <SDL/SDL.h>
-#include <SDL/SDL_ttf.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 #include "../SDLHelpers.h"
 
@@ -20,7 +20,7 @@ DropDownList::DropDownList(vector<string> list, vector<Dialog *> *dialogs, SDL_R
 	selected = 0;
 	pressed = false;
 	listbox_item_size = 20;
-	setSurface(SDL_CreateRGBSurface(SDL_HWSURFACE, getPos()->w, getPos()->h, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000));
+	setSurface(SDL_CreateRGBSurface(0, getPos()->w, getPos()->h, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000));
 	drawDropDownList();
 }
 

@@ -3,8 +3,8 @@
 
 using namespace std;
 
-#include <SDL/SDL.h>
-#include <SDL/SDL_ttf.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 #include "../SDLHelpers.h"
 
@@ -52,8 +52,8 @@ void Button::drawButton() {
 	
 	int w = getPos()->w;
 	int h = getPos()->h;
-	button_up = SDL_CreateRGBSurface(SDL_HWSURFACE, w, h, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
-	button_down = SDL_CreateRGBSurface(SDL_HWSURFACE, w, h, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
+	button_up = SDL_CreateRGBSurface(0, w, h, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
+	button_down = SDL_CreateRGBSurface(0, w, h, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
 	Uint32 *p_up = (Uint32 *) button_up->pixels;
 	Uint32 *p_down = (Uint32 *) button_down->pixels;
 	SDL_Color color_up;

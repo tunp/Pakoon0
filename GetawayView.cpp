@@ -4,9 +4,9 @@
 #define OEMRESOURCE
 //#include "Getaway.h"
 
-#include <SDL/SDL.h>
-#include <SDL/SDL_opengl.h>
-#include <SDL/SDL_ttf.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_opengl.h>
+#include <SDL2/SDL_ttf.h>
 
 #include "SDLHelpers.h"
 
@@ -166,36 +166,6 @@ void CGetawayView::OnCreate()
   CGetawayDoc* pDoc = GetDocument();
   ASSERT_VALID(pDoc);*/
   Settings::ReadSettings(pDoc->GetSimulation());
-  
-	if (SDL_Init(SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_VIDEO) < 0) {
-		cout << "Unable to init SDL: " << SDL_GetError() << endl;
-		exit = true;
-		return;
-		
-	}
-	
-	if(TTF_Init() == -1)
-	{
-		cout << "TTF_Init: " << TTF_GetError() << endl;
-		exit = true;
-		return;
-	}
-	
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1); 
-	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16); 
-	
-	//SDL_Surface* drawContext;
-	//drawContext = SDL_SetVideoMode(1024, 768, 0, SDL_OPENGL);
-	int width = pDoc->GetSimulation()->m_nDispWidth;
-	int height = pDoc->GetSimulation()->m_nDispHeight;
-	cout << "Trying display mode: " << width << "x" << height << endl;
-	if (SDL_SetVideoMode(width, height, 0, SDL_OPENGL | SDL_FULLSCREEN) == NULL) {
-		cout << "SDL_SetVideoMode: " << SDL_GetError() << endl;
-		exit = true;
-		return;
-	}
-	
-	SDL_WM_SetCaption("Pakoon", NULL);
 
   // Initialize common OpenGL features
   InitializeOpenGL();
@@ -340,8 +310,6 @@ void CGetawayView::InitializeOpenGL() {
 
 
 void CGetawayView::FadeInText(string s1, string s2, string s3, int ticks, TTF_Font *pfont1, TTF_Font *pfont2) {
-	const SDL_VideoInfo* vi = SDL_GetVideoInfo();
-	
   /*CBrush brushBlack(RGB(0, 0, 0));
   CRect rectWnd;
   GetClientRect(&rectWnd);
@@ -396,8 +364,8 @@ void CGetawayView::FadeInText(string s1, string s2, string s3, int ticks, TTF_Fo
 	if (s1.length() > 0) {
 		if(!(surface = TTF_RenderText_Blended(pfont1, s1.c_str(), getColor(color, color, color))))
 			cout << TTF_GetError() << endl;
-		x = vi->current_w * 2 / 3 - vi->current_w / 20 - surface->w;
-		y = vi->current_h / 2 - surface->h * 2;
+		x = window_width * 2 / 3 - window_width / 20 - surface->w;
+		y = window_height / 2 - surface->h * 2;
 		drawSurface(x, y, x + surface->w, y + surface->h, GL_BGRA, surface);
 		SDL_FreeSurface(surface);
 	}
@@ -414,8 +382,8 @@ void CGetawayView::FadeInText(string s1, string s2, string s3, int ticks, TTF_Fo
     if (s2.length() > 0) {       
 		if(!(surface = TTF_RenderText_Blended(pfont1, s2.c_str(), getColor(color, color, color))))
 			cout << TTF_GetError() << endl;
-		x = vi->current_w * 2 / 3 - vi->current_w / 20 - surface->w;
-		y = vi->current_h / 2 - surface->h;
+		x = window_width * 2 / 3 - window_width / 20 - surface->w;
+		y = window_height / 2 - surface->h;
 		drawSurface(x, y, x + surface->w, y + surface->h, GL_BGRA, surface);
 		SDL_FreeSurface(surface);
 	}
@@ -433,8 +401,8 @@ void CGetawayView::FadeInText(string s1, string s2, string s3, int ticks, TTF_Fo
 	if (s3.length() > 0) {
 		if(!(surface = TTF_RenderText_Blended(pfont2, s3.c_str(), getColor(color, color, color))))
 			cout << TTF_GetError() << endl;
-		x = vi->current_w * 2 / 3 - vi->current_w / 20 - surface->w;
-		y = vi->current_h / 2;
+		x = window_width * 2 / 3 - window_width / 20 - surface->w;
+		y = window_height / 2;
 		drawSurface(x, y, x + surface->w, y + surface->h, GL_BGRA, surface);
 		SDL_FreeSurface(surface);
 	}
@@ -576,7 +544,6 @@ void CGetawayView::DrawPlanetGlow(double current, int nRad) {
 
 
 void CGetawayView::TestCredits() {
-	const SDL_VideoInfo* vi = SDL_GetVideoInfo();
 	int glow_ticks = 200;
 	int text_ticks = 2500;
 	int cur_ticks = SDL_GetTicks() - start_ticks;
@@ -599,12 +566,12 @@ void CGetawayView::TestCredits() {
 
   //DrawPlanetGlow(pDC, rectWnd.Width() * 1 / 3, rectWnd.Height() / 2 - 100, 250);
 	DrawPlanetGlow((cur_ticks / glow_ticks), 200);
-	double x = vi->current_w * 1 / 3 - 201;
-	double y = vi->current_h / 2 - 100 - 201;
+	double x = window_width * 1 / 3 - 201;
+	double y = window_height / 2 - 100 - 201;
 	drawSurface(x, y, x + 300, y + 300, GL_RGBA, credits_glow);
 
-	x = vi->current_w * 2 / 3;
-	y = vi->current_h / 2 - 100;
+	x = window_width * 2 / 3;
+	y = window_height / 2 - 100;
 	drawSurface(x, y, x + credits_bitmap->w, y + credits_bitmap->h, GL_RGBA, credits_bitmap);
 
   // Draw texts fading in
@@ -673,7 +640,7 @@ void CGetawayView::TestCredits() {
   max_ticks += text_ticks;
   FadeInText("Special Thanks for", "The Pragmatic Sound Library (FMOD)", "Firelight Multimedia", cur_ticks - max_ticks, fontSmall, fontBig);
   
-  SDL_GL_SwapBuffers();
+  SDL_GL_SwapWindow(window);
   
   max_ticks += text_ticks;
   if (cur_ticks > max_ticks || escape) {
@@ -740,8 +707,6 @@ void CGetawayView::TestCredits() {
 
 //void CGetawayView::Draw43AAInPhase(CDC* pDC, HDC hDC, double dPhase) {
 void CGetawayView::Draw43AAInPhase(double dPhase) {
-  const SDL_VideoInfo* vi = SDL_GetVideoInfo();
-
   glDrawBuffer(GL_BACK);
 
   // Reset OpenGL
@@ -750,14 +715,14 @@ void CGetawayView::Draw43AAInPhase(double dPhase) {
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   glScaled(-1.0, 1.0, 1.0);
-  double dAspect = double(vi->current_w) / double(vi->current_h);
+  double dAspect = double(window_width) / double(window_height);
   gluPerspective(70.0f, dAspect, 0.1f, 100.0f);
   
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
   // Set look at -point for camera 
-  glViewport(0, 0, (GLint) vi->current_w, (GLint) vi->current_h);
+  glViewport(0, 0, (GLint) window_width, (GLint) window_height);
   gluLookAt(0, -5, 0, 0, 0, 0, 0, 0, -1);
 
   glEnable(GL_BLEND);
@@ -841,7 +806,7 @@ void CGetawayView::Draw43AAInPhase(double dPhase) {
   glFinish();
 
   //SwapBuffers(hDC);
-  SDL_GL_SwapBuffers();
+  SDL_GL_SwapWindow(window);
 }
 
 
@@ -1056,8 +1021,6 @@ void CGetawayView::OnDrawCredits() {
 }
 
 void CGetawayView::OnDrawStartMenu() {
-	const SDL_VideoInfo* vi = SDL_GetVideoInfo();
-
 	/*glViewport(0, 0, (GLint) vi->current_w, (GLint) vi->current_h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -1085,8 +1048,8 @@ void CGetawayView::OnDrawStartMenu() {
 	
 	glBindTexture(GL_TEXTURE_2D, texture[0]);*/
 	
-	double x1 = vi->current_w / 2 - 470/2;
-	double y1 = vi->current_h / 2 - 226;
+	double x1 = window_width / 2 - 470/2;
+	double y1 = window_height / 2 - 226;
 	double x2 = x1 + 470;
 	double y2 = y1 + 226;
 	
@@ -1123,8 +1086,8 @@ void CGetawayView::OnDrawStartMenu() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);*/
 	
-	x1 = vi->current_w / 2 - surface->w / 2;
-	y1 = vi->current_h - 2 * surface->h;
+	x1 = window_width / 2 - surface->w / 2;
+	y1 = window_height - 2 * surface->h;
 	x2 = x1 + surface->w;
 	y2 = y1 + surface->h;
 	
@@ -1133,17 +1096,17 @@ void CGetawayView::OnDrawStartMenu() {
 	SDL_FreeSurface(surface);
 
 	// Draw menu items
-	DrawMenuItem(menu_font, 0, 0, "Begin", getColor(9*2/3, 115*2/3, 12*2/3), vi);
-	DrawMenuItem(menu_font, 1, 2, "Visuals", getColor(5*2/3, 85*2/3, 165*2/3), vi);
-	DrawMenuItem(menu_font, 2, 3, "Sounds", getColor(5*2/3, 85*2/3, 165*2/3), vi);
-	DrawMenuItem(menu_font, 3, 4, "Controls", getColor(5*2/3, 85*2/3, 165*2/3), vi);
-	DrawMenuItem(menu_font, 4, 5, "Credits", getColor(5*2/3, 85*2/3, 165*2/3), vi);
-	DrawMenuItem(menu_font, 5, 6, "Help", getColor(5*2/3, 85*2/3, 165*2/3), vi);
-	DrawMenuItem(menu_font, 6, 8, "Exit", getColor(135*2/3, 0, 0), vi);
+	DrawMenuItem(menu_font, 0, 0, "Begin", getColor(9*2/3, 115*2/3, 12*2/3));
+	DrawMenuItem(menu_font, 1, 2, "Visuals", getColor(5*2/3, 85*2/3, 165*2/3));
+	DrawMenuItem(menu_font, 2, 3, "Sounds", getColor(5*2/3, 85*2/3, 165*2/3));
+	DrawMenuItem(menu_font, 3, 4, "Controls", getColor(5*2/3, 85*2/3, 165*2/3));
+	DrawMenuItem(menu_font, 4, 5, "Credits", getColor(5*2/3, 85*2/3, 165*2/3));
+	DrawMenuItem(menu_font, 5, 6, "Help", getColor(5*2/3, 85*2/3, 165*2/3));
+	DrawMenuItem(menu_font, 6, 8, "Exit", getColor(135*2/3, 0, 0));
 	
 	drawDialogs();
 	
-	SDL_GL_SwapBuffers();
+	SDL_GL_SwapWindow(window);
 	
 	// Check whether a new update is needed to fade menu texts
 	bool bUpdate = false;
@@ -1261,7 +1224,7 @@ void CGetawayView::OnDrawStartMenu() {
   ::ReleaseDC(GetSafeHwnd(), hDC);
 }*/
 
-void CGetawayView::DrawMenuItem(TTF_Font *font, int m, int nY, string text, SDL_Color color, const SDL_VideoInfo* vi)
+void CGetawayView::DrawMenuItem(TTF_Font *font, int m, int nY, string text, SDL_Color color)
 {
 	GLuint texture[1];
 	SDL_Surface *surface;
@@ -1290,8 +1253,8 @@ void CGetawayView::DrawMenuItem(TTF_Font *font, int m, int nY, string text, SDL_
 	if(!(surface = TTF_RenderText_Blended(font, text.c_str(), color)))
 		cout << TTF_GetError() << endl;
 	
-	double x1 = vi->current_w / 2 - surface->w / 2;
-	double y1 = vi->current_h / 2 + surface->h * nY;
+	double x1 = window_width / 2 - surface->w / 2;
+	double y1 = window_height / 2 + surface->h * nY;
 	double x2 = x1 + surface->w;
 	double y2 = y1 + surface->h;
 	
@@ -1368,7 +1331,6 @@ void CGetawayView::OnDrawGame() {
   //wglMakeCurrent(hDC, m_hGLRC); 
   
   // Use OpenGL to draw the world
-  const SDL_VideoInfo* vi = SDL_GetVideoInfo();
 
   glDrawBuffer(GL_BACK);
 
@@ -1383,7 +1345,7 @@ void CGetawayView::OnDrawGame() {
     dScreenFormat = 2.0 / 3.0;
   }
   double aspect = 1.0;
-  aspect = (double) vi->current_w / (double) (vi->current_h * dScreenFormat);
+  aspect = (double) window_width / (double) (window_height * dScreenFormat);
 
   pDoc->GetSimulation()->PrePaint();
 
@@ -1405,9 +1367,9 @@ void CGetawayView::OnDrawGame() {
 
   // Set look at -point for camera 
   glViewport(0, 
-             (GLint) ((vi->current_h - vi->current_h * dScreenFormat) / 2), 
-             (GLint) vi->current_w, 
-             (GLint) (double(vi->current_h) * dScreenFormat));
+             (GLint) ((window_height - window_height * dScreenFormat) / 2), 
+             (GLint) window_width, 
+             (GLint) (double(window_height) * dScreenFormat));
 
   gluLookAt(pCamera->m_vLocation.m_dX, 
             pCamera->m_vLocation.m_dY, 
@@ -1469,7 +1431,7 @@ void CGetawayView::OnDrawGame() {
   glFinish();
 
   //SwapBuffers(pDC->GetSafeHdc());
-  SDL_GL_SwapBuffers();
+  SDL_GL_SwapWindow(window);
 
 
   //::ReleaseDC(GetSafeHwnd(), hDC);
@@ -1861,7 +1823,6 @@ void CGetawayView::OnLButtonUp(int x, int y) {
 }
 
 void CGetawayView::drawDialogs() {
-	const SDL_VideoInfo* vi = SDL_GetVideoInfo();
 	for (int x = 0; x < dialogs.size(); x++) {
 		if (dialogs[x]->isExit()) {
 		  delete dialogs[x];
@@ -1875,8 +1836,8 @@ void CGetawayView::drawDialogs() {
 			SDL_Surface *surface = dialogs[x]->getSurface();
 			SDL_Rect *r = dialogs[x]->getPos();
 			if (dialogs[x]->isDefaultPos()) {
-				r->x = vi->current_w / 2 - surface->w / 2;
-				r->y = vi->current_h / 2 - surface->h / 2;
+				r->x = window_width / 2 - surface->w / 2;
+				r->y = window_height / 2 - surface->h / 2;
 			}
 			double x1 = r->x;
 			double y1 = r->y;
@@ -1889,12 +1850,10 @@ void CGetawayView::drawDialogs() {
 }
 
 void CGetawayView::drawSurface(double x1, double y1, double x2, double y2, GLenum format, SDL_Surface *surface) {
-	const SDL_VideoInfo* vi = SDL_GetVideoInfo();
-	
-	glViewport(0, 0, (GLint) vi->current_w, (GLint) vi->current_h);
+	glViewport(0, 0, (GLint) window_width, (GLint) window_height);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0, vi->current_w, vi->current_h, 0, 0, 1);
+	glOrtho(0, window_width, window_height, 0, 0, 1);
 	glDisable(GL_DEPTH_TEST);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -1963,12 +1922,12 @@ void CGetawayView::loadCredits() {
 	last_angle = 160.0;
 	int width = 300;
 	int height = 300;
-	credits_glow = SDL_CreateRGBSurface(SDL_HWSURFACE, width, height, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
+	credits_glow = SDL_CreateRGBSurface(0, width, height, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
 	
 	SDL_Surface *val = SDL_LoadBMP("res/bitmap1.bmp");
 	if (val == NULL)
 		cout << "Cannot load file!" << endl;
-	credits_bitmap = SDL_CreateRGBSurface(SDL_HWSURFACE, val->w, val->h, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
+	credits_bitmap = SDL_CreateRGBSurface(0, val->w, val->h, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
 	SDL_BlitSurface(val, NULL, credits_bitmap, NULL);
 	
 	vector<string> fontSmalls;

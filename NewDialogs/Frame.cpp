@@ -4,15 +4,15 @@
 
 using namespace std;
 
-#include <SDL/SDL.h>
-#include <SDL/SDL_ttf.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 #include "Item.h"
 #include "Dialog.h"
 #include "Frame.h"
 
 Frame::Frame(SDL_Rect pos) : Item(pos) {
-	setSurface(SDL_CreateRGBSurface(SDL_HWSURFACE, getPos()->w, getPos()->h, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000));
+	setSurface(SDL_CreateRGBSurface(0, getPos()->w, getPos()->h, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000));
 	memset((int *) getSurface()->pixels, 0xFFFFFFFF, pos.w * pos.h * 4);
 }
 

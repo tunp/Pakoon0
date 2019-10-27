@@ -3,7 +3,7 @@
 // 
 
 //#include "fmod.h"
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 //#include <fstream>
 #include <cstdio>
 #include <cstdlib>

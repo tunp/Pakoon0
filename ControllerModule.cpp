@@ -3,7 +3,7 @@
 // 
 
 //#include "stdafx.h"
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 #include "ControllerModule.h"
 
 /*bool                  ControllerModule::m_bInitialized = false;

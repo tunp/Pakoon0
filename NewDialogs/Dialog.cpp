@@ -4,8 +4,8 @@
 
 using namespace std;
 
-#include <SDL/SDL.h>
-#include <SDL/SDL_image.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 #include "Item.h"
 #include "Dialog.h"
@@ -14,8 +14,7 @@ bool Dialog::loadBackground(string name) {
 	background = IMG_Load(name.c_str());
 	if (!background)
 		return false;
-	surface = SDL_CreateRGBSurface(SDL_HWSURFACE, background->w, background->h, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
-	SDL_SetAlpha(background, 0, 0);
+	surface = SDL_CreateRGBSurface(0, background->w, background->h, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
 	pos.w = background->w;
 	pos.h = background->h;
 	default_pos = true;
