@@ -31,7 +31,7 @@ DlgMainMenu::DlgMainMenu(CGetawayView *pView) : Dialog() {
 	this->pView = pView;
 	
 	if (!loadBackground("NewDialogs/menu.png"))
-		cout << "Background open failed!" << endl;
+		cout << "Background open failed NewDialogs/menu.png!" << endl;
 	
 	Item *item = new Button("Visuals...", getColor(0xDC, 0xDC, 0xE6), getRect(16, 47, 95, 27));
 	((Button *) item)->setButtonFunc(&visualsCallback, (void *)this);

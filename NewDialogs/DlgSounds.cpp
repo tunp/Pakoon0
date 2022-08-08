@@ -30,7 +30,7 @@ DlgSounds::DlgSounds(CGetawayView *pView) : Dialog() {
 	m_rbSoundSpace = SoundModule::GetSoundSpace();
 	
 	if (!loadBackground("NewDialogs/sounds.png"))
-		cout << "Background open failed!" << endl;
+		cout << "Background open failed NewDialogs/sounds.png!" << endl;
 		
 	Item *item = new Scrollbar(0, 255, SoundModule::GetMenuMusicVolume(), getRect(180, 147, 231, 22));
 	addItem(item);

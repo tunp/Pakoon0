@@ -29,7 +29,7 @@ DlgControls::DlgControls(CGetawayView *pView) : Dialog() {
 	m_rbUse = m_pSimulation->m_nController;
 	
 	if (!loadBackground("NewDialogs/controls.png"))
-		cout << "Background open failed!" << endl;
+		cout << "Background open failed NewDialogs/controls.png!" << endl;
 		
 	vector<string> list;
 	list.push_back("moi");

@@ -1894,7 +1894,7 @@ void CGetawayView::drawSurface(double x1, double y1, double x2, double y2, GLenu
 void CGetawayView::loadStartMenu() {
 	surface_start_menu_head = SDL_LoadBMP("res/MenuFinal.bmp");
 	if (surface_start_menu_head == NULL)
-		cout << "Cannot load file!" << endl;
+		cout << "Cannot load file res/MenuFinal.bmp!" << endl;
 	
 	vector<string> copyright_fonts;
 	copyright_fonts.push_back("FreeSans.ttf");
@@ -1927,7 +1927,7 @@ void CGetawayView::loadCredits() {
 	
 	SDL_Surface *val = SDL_LoadBMP("res/bitmap1.bmp");
 	if (val == NULL)
-		cout << "Cannot load file!" << endl;
+		cout << "Cannot load file res/bitmap1.bmp!" << endl;
 	credits_bitmap = SDL_CreateRGBSurface(0, val->w, val->h, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
 	SDL_BlitSurface(val, NULL, credits_bitmap, NULL);
 	

@@ -294,7 +294,7 @@ void BCar::LoadCarFromFile(std::string sFilename) {
                                   BVector(0, 0, 1) * 
                                   m_pWheel[3].m_dDistFromSuspPoint;
   } else {
-	  cout << "Cannot open file!" << endl;
+	  cout << "Cannot open file " << sFilename << "!" << endl;
     //AfxMessageBox("Cannot open file!");
   }
 }

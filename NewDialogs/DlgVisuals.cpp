@@ -44,7 +44,7 @@ DlgVisuals::DlgVisuals(CGetawayView *pView) : Dialog() {
 	m_rbTextureSmoothness = m_pSimulation->m_nTextureSmoothness;
 	
 	if (!loadBackground("NewDialogs/visuals.png"))
-		cout << "Background open failed!" << endl;
+		cout << "Background open failed NewDialogs/visuals.png!" << endl;
 		
 	vector<string> list;
 	int selected = -1;
