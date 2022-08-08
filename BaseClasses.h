@@ -5,9 +5,9 @@
 #pragma once
 
 #include <math.h>
-//#include <GL/gl.h>
-//#include <GL/glu.h>
-#include <SDL/SDL_opengl.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+//#include <SDL/SDL_opengl.h>
 #include <cstring>
 
 

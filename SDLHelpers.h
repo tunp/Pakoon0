@@ -6,8 +6,8 @@
 #include <vector>
 #include <string>
 
-static const char *font_paths[] = {"C:/windows/fonts/", "/usr/share/fonts/TTF/"};
-static const short font_path_count = 2;
+static const char *font_paths[] = {"C:/windows/fonts/", "/usr/share/fonts/TTF/", "./"};
+static const short font_path_count = 3;
 
 static SDL_Rect getRect(Sint16 x, Sint16 y, Uint16 w, Uint16 h) {
 	SDL_Rect rect;
