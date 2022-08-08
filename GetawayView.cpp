@@ -1866,10 +1866,11 @@ void CGetawayView::drawSurface(double x1, double y1, double x2, double y2, GLenu
 
 	OpenGLHelpers::SetColorFull(1, 1, 1, 1);
 
+  unsigned short row_data_width = surface->pitch / surface->format->BytesPerPixel;
 	GLuint texture[1];
 	glGenTextures(1, &texture[0]);
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surface->w, surface->h, 0, format, GL_UNSIGNED_BYTE, surface->pixels);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, row_data_width, surface->h, 0, format, GL_UNSIGNED_BYTE, surface->pixels);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -1879,9 +1880,9 @@ void CGetawayView::drawSurface(double x1, double y1, double x2, double y2, GLenu
 	//glColor3f(0.0, 0.0, 0.0);
 	glTexCoord2f(0.0f, 0.0f);
 	glVertex2f(x1, y1);
-	glTexCoord2f(1.0f, 0.0f);
+	glTexCoord2f((float) surface->w / row_data_width, 0.0f);
 	glVertex2f(x2, y1);
-	glTexCoord2f(1.0f, 1.0f);
+	glTexCoord2f((float) surface->w / row_data_width, 1.0f);
 	glVertex2f(x2, y2);
 	glTexCoord2f(0.0f, 1.0f);
 	glVertex2f(x1, y2);
