@@ -48,9 +48,16 @@ void mainLoop(CGetawayView *gw) {
   }
 }
 
+#ifdef __EMSCRIPTEN__
 void emscripten_loop(void *gw) {
-  mainLoop((CGetawayView *)gw);
+  if (((CGetawayView *)gw)->exit) {
+    emscripten_run_script("history.back()");
+    emscripten_cancel_main_loop();
+  } else {
+    mainLoop((CGetawayView *)gw);
+  }
 }
+#endif
 
 int main(int argc, char *argv[])
 {
