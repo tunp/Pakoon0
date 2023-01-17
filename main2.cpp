@@ -29,7 +29,9 @@ void mainLoop(CGetawayView *gw) {
   while(SDL_PollEvent(&event))
   {
     if(event.type == SDL_KEYDOWN) {
-      gw->OnKeyDown(event.key.keysym.sym);
+      if (!((SDL_KeyboardEvent *) &event)->repeat) {
+        gw->OnKeyDown(event.key.keysym.sym);
+      }
     } else if (event.type == SDL_KEYUP) {
       gw->OnKeyUp(event.key.keysym.sym);
     } else if (event.type == SDL_MOUSEBUTTONDOWN) {
