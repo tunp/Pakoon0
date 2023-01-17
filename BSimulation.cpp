@@ -791,6 +791,11 @@ void BSimulation::DrawRotor() {
   if(m_car.m_bHeliModeActivating && m_car.m_nHeliMode < 300) {
     m_car.m_dHeliMode += (2.0 * dFactor);
     m_car.m_nHeliMode = int(m_car.m_dHeliMode);
+
+    // dont round back to zero
+    if (m_car.m_nHeliMode == 0) {
+      m_car.m_nHeliMode = 1;
+    }
   } else if(m_car.m_bHeliModeActivating && m_car.m_nHeliMode < 400) {
     m_car.m_dHeliMode += (1.0 * dFactor);
     m_car.m_nHeliMode = int(m_car.m_dHeliMode);
@@ -1280,6 +1285,11 @@ void BSimulation::DrawJet() {
   if(m_car.m_bJetModeActivating && m_car.m_nJetMode < 100) {
     m_car.m_dJetMode += 2.0 * dFactor;
     m_car.m_nJetMode = int(m_car.m_dJetMode);
+
+    // dont round back to zero
+    if (m_car.m_nJetMode == 0) {
+      m_car.m_nJetMode = 1;
+    }
   } else if(!m_car.m_bJetModeActivating && m_car.m_nJetMode > 0) {
     m_car.m_dJetMode -= 2.0 * dFactor;
     m_car.m_nJetMode = int(m_car.m_dJetMode);
