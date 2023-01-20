@@ -44,6 +44,10 @@ void mainLoop(CGetawayView *gw) {
       }
     } else if (event.type == SDL_MOUSEMOTION) {
       gw->OnMouseMove(event.motion.x, event.motion.y);
+    } else if (event.type == SDL_FINGERDOWN) {
+      gw->OnFingerDown(event.tfinger.x, event.tfinger.y, event.tfinger.fingerId);
+    } else if (event.type == SDL_FINGERUP) {
+      gw->OnFingerUp(event.tfinger.x, event.tfinger.y, event.tfinger.fingerId);
     } else if (event.type == SDL_QUIT) {
       gw->exit = true;
     }

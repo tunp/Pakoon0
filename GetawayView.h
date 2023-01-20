@@ -157,10 +157,16 @@ public:
   //}}AFX_MSG
   //DECLARE_MESSAGE_MAP()
   void OnLButtonUp(int x, int y);
+  void OnFingerDown(float x, float y, int finger_id);
+  void OnFingerUp(float x, float y, int finger_id);
+  bool touch_seen;
   
   vector<Dialog *> dialogs;
   
   void drawDialogs();
+
+  template<typename D> vector<Dialog *>::iterator getFirstDialogOfType();
+  template<typename D> bool isDialogOpen();
   
   void drawSurface(double x1, double y1, double x2, double y2, GLenum format, SDL_Surface *surface);
   

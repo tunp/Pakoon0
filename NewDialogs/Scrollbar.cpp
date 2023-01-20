@@ -53,14 +53,16 @@ void Scrollbar::drawScrollbar() {
 	}
 }
 
-void Scrollbar::onMousePress(int x, int y) {
+bool Scrollbar::onMousePress(int x, int y) {
 	bool is_in_x = x > getPos()->x && x < getPos()->x + getPos()->w;
 	bool is_in_y = y > getPos()->y && y < getPos()->y + getPos()->h;
 	if (is_in_x && is_in_y) {
 		//setSurface(buttonDown);
 		mouse_offset = (vertical ? y : x) - getBarPos();
 		pressed = true;
+    return true;
 	}
+  return false;
 }
 
 void Scrollbar::onMouseRelease(int x, int y) {

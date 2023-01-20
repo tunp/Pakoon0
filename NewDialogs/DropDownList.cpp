@@ -81,13 +81,15 @@ void DropDownList::drawDropDownList() {
 	TTF_CloseFont(font);
 }
 
-void DropDownList::onMousePress(int x, int y) {
+bool DropDownList::onMousePress(int x, int y) {
 	bool is_in_x = x > getPos()->x && x < getPos()->x + getPos()->w;
 	bool is_in_y = y > getPos()->y && y < getPos()->y + getPos()->h;
 	if (is_in_x && is_in_y) {
 		//setSurface(buttonDown);
 		pressed = true;
+    return true;
 	}
+  return false;
 }
 
 void DropDownList::onMouseRelease(int x, int y) {

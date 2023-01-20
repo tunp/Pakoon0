@@ -8,7 +8,7 @@ public:
 	void draw();
 	void addItem(Item *item);
 	Item *getItem(int i);
-	void onMousePress(int x, int y);
+	bool onMousePress(int x, int y);
 	void onMouseRelease(int x, int y);
 	void onMouseMove(int x, int y);
 };

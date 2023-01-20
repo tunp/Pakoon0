@@ -13,7 +13,7 @@ public:
 	Scrollbar(int min_value, int max_value, int value, SDL_Rect pos);
 	~Scrollbar();
 	void drawScrollbar();
-	void onMousePress(int x, int y);
+	bool onMousePress(int x, int y);
 	void onMouseRelease(int x, int y);
 	void onMouseMove(int x, int y);
 	int getBarPos();

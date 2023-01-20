@@ -37,11 +37,18 @@ SDL_Rect *Item::getPos() {
 	return &pos;
 }
 
-void Item::onMousePress(int x, int y) {
+bool Item::onMousePress(int x, int y) {
+  return false;
 }
 
 void Item::onMouseRelease(int x, int y) {
 }
 
 void Item::onMouseMove(int x, int y) {
+}
+
+void Item::onFingerDown(int x, int y, int finger_id) {
+}
+
+void Item::onFingerUp(int x, int y, int finger_id) {
 }

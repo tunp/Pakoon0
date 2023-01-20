@@ -71,14 +71,16 @@ void Listbox::drawListbox() {
 	}
 }
 
-void Listbox::onMousePress(int x, int y) {
+bool Listbox::onMousePress(int x, int y) {
 	bool is_in_x = x > getPos()->x && x < getPos()->x + getPos()->w;
 	bool is_in_y = y > getPos()->y && y < getPos()->y + getPos()->h;
 	if (is_in_x && is_in_y) {
 		selected = (y - getPos()->y) / item_size;
 		if (value_changed_func)
 			(*value_changed_func)(p);
+    return true;
 	}
+  return false;
 }
 
 void Listbox::setValueChangedFunc(void (*value_changed_func)(void *p), void *p) {

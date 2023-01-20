@@ -56,10 +56,11 @@ Item *Frame::getItem(int i) {
 	return items[i];
 }
 
-void Frame::onMousePress(int x, int y) {
+bool Frame::onMousePress(int x, int y) {
 	for (unsigned int z = 0; z < items.size(); z++) {
 		items[z]->onMousePress(x - getPos()->x, y - getPos()->y);
 	}
+  return false;
 }
 
 void Frame::onMouseRelease(int x, int y) {

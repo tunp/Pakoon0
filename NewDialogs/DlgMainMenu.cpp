@@ -26,6 +26,7 @@ using namespace std;
 #include "DlgVisuals.h"
 #include "DlgSounds.h"
 #include "DlgControls.h"
+#include "DlgOnScreenKbd.h"
 
 DlgMainMenu::DlgMainMenu(CGetawayView *pView) : Dialog() {
 	this->pView = pView;
@@ -116,6 +117,10 @@ void DlgMainMenu::quit() {
 		pView->m_pDrawFunction = &CGetawayView::OnDrawStartMenu;
 		pView->m_bDrawOnlyMenu = false;
 		pView->m_bFullRedraw = true;
+    vector<Dialog *>::iterator kbdi = pView->getFirstDialogOfType<DlgOnScreenKbd *>();
+    if (kbdi != pView->dialogs.end()) {
+      pView->dialogs.erase(kbdi);
+    }
 		//pView->InvalidateRect(NULL);
 	}
 	setExit(true);

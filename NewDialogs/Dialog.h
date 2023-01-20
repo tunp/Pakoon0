@@ -14,9 +14,11 @@ public:
 	void draw();
 	SDL_Surface *getSurface();
 	void deleteSurfaceAndBackground();
-	void onMousePress(int x, int y);
-	void onMouseRelease(int x, int y);
-	void onMouseMove(int x, int y);
+	virtual bool onMousePress(int x, int y);
+	virtual bool onMouseRelease(int x, int y);
+	virtual bool onMouseMove(int x, int y);
+	virtual bool onFingerDown(int x, int y, int finger_id);
+	virtual bool onFingerUp(int x, int y, int finger_id);
 	void setPos(SDL_Rect pos);
 	SDL_Rect *getPos();
 	void setExit(bool exit);

@@ -10,7 +10,7 @@ public:
 	DropDownList(vector<string> list, vector<Dialog *> *dialogs, SDL_Rect pos);
 	~DropDownList();
 	void drawDropDownList();
-	void onMousePress(int x, int y);
+	bool onMousePress(int x, int y);
 	void onMouseRelease(int x, int y);
 	vector<string> getList();
 	void setSelected(int selected);

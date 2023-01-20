@@ -32,7 +32,9 @@ void Dialog::deleteItems() {
 }
 
 void Dialog::draw() {
-	SDL_BlitSurface(background, NULL, surface, NULL);
+  if (background) {
+    SDL_BlitSurface(background, NULL, surface, NULL);
+  }
 	for (unsigned int x = 0; x < items.size(); x++) {
 		SDL_BlitSurface(items[x]->getSurface(), NULL, surface, items[x]->getPos());
 	}
@@ -48,26 +50,47 @@ void Dialog::deleteSurfaceAndBackground() {
 	delete surface;
 }
 
-void Dialog::onMousePress(int x, int y) {
+bool Dialog::onMousePress(int x, int y) {
 	if (x < 0 || y < 0 || x > surface->w || y > surface->h) {
 		exit = true;
-		return;
+		return false;
 	}
 	for (unsigned int z = 0; z < items.size(); z++) {
 		items[z]->onMousePress(x, y);
 	}
+  return false;
 }
 
-void Dialog::onMouseRelease(int x, int y) {
+bool Dialog::onMouseRelease(int x, int y) {
 	for (unsigned int z = 0; z < items.size(); z++) {
 		items[z]->onMouseRelease(x, y);
 	}
+  return false;
 }
 
-void Dialog::onMouseMove(int x, int y) {
+bool Dialog::onMouseMove(int x, int y) {
 	for (unsigned int z = 0; z < items.size(); z++) {
 		items[z]->onMouseMove(x, y);
 	}
+  return false;
+}
+
+bool Dialog::onFingerDown(int x, int y, int finger_id) {
+  if (x < 0 || y < 0 || x > surface->w || y > surface->h) {
+    exit = true;
+    return false;
+  }
+  for (unsigned int z = 0; z < items.size(); z++) {
+    items[z]->onFingerDown(x, y, finger_id);
+  }
+  return false;
+}
+
+bool Dialog::onFingerUp(int x, int y, int finger_id) {
+  for (unsigned int z = 0; z < items.size(); z++) {
+    items[z]->onFingerUp(x, y, finger_id);
+  }
+  return false;
 }
 
 void Dialog::setPos(SDL_Rect pos) {

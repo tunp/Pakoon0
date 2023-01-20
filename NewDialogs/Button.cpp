@@ -8,7 +8,6 @@ using namespace std;
 
 #include "../SDLHelpers.h"
 
-#include "Item.h"
 #include "Button.h"
 
 Button::Button(string text, SDL_Color color, SDL_Rect pos) : Item(pos) {
@@ -17,6 +16,8 @@ Button::Button(string text, SDL_Color color, SDL_Rect pos) : Item(pos) {
 	pressed = false;
 	selected = false;
 	button_func = NULL;
+	button_press_func = NULL;
+	button_release_func = NULL;
 	drawButton();
 	selectSurface();
 }
@@ -108,27 +109,59 @@ void Button::drawButton() {
 	TTF_CloseFont(font);
 }
 
-void Button::onMousePress(int x, int y) {
+bool Button::onMousePress(int x, int y) {
 	bool isInX = x > getPos()->x && x < getPos()->x + getPos()->w;
 	bool isInY = y > getPos()->y && y < getPos()->y + getPos()->h;
 	if (isInX && isInY) {
 		pressed = true;
+    if (button_press_func) {
+      (*button_press_func)(p, this);
+    }
 		selectSurface();
+    return true;
 	}
+  return false;
 }
 
 void Button::onMouseRelease(int x, int y) {
-	bool is_in_x = x > getPos()->x && x < getPos()->x + getPos()->w;
-	bool is_in_y = y > getPos()->y && y < getPos()->y + getPos()->h;
-	if (is_in_x && is_in_y && pressed && button_func) {
-		(*button_func)(p, this);
-	}
-	pressed = false;
-	selectSurface();
+  if (pressed) {
+    bool is_in_x = x > getPos()->x && x < getPos()->x + getPos()->w;
+    bool is_in_y = y > getPos()->y && y < getPos()->y + getPos()->h;
+    if (is_in_x && is_in_y && button_func) {
+      (*button_func)(p, this);
+    }
+    if (button_release_func) {
+      (*button_release_func)(p, this);
+    }
+    pressed = false;
+    selectSurface();
+  }
+}
+
+void Button::onFingerDown(int x, int y, int finger_id) {
+  if (onMousePress(x, y)) {
+    this->finger_id = finger_id;
+  }
+}
+
+void Button::onFingerUp(int x, int y, int finger_id) {
+  if (pressed && this->finger_id == finger_id) {
+    onMouseRelease(x, y);
+  }
 }
 
 void Button::setButtonFunc(void (*button_func)(void *p, Button *b), void *p) {
 	this->button_func = button_func;
+	this->p = p;
+}
+
+void Button::setButtonPressFunc(void (*button_press_func)(void *p, Button *b), void *p) {
+	this->button_press_func = button_press_func;
+	this->p = p;
+}
+
+void Button::setButtonReleaseFunc(void (*button_release_func)(void *p, Button *b), void *p) {
+	this->button_release_func = button_release_func;
 	this->p = p;
 }
 

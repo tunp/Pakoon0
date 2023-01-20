@@ -29,6 +29,7 @@ using namespace std;
 #include "NewDialogs/DlgVisuals.h"
 #include "NewDialogs/DlgSounds.h"
 #include "NewDialogs/DlgControls.h"
+#include "NewDialogs/DlgOnScreenKbd.h"
 //#include "Dialogs.h"
 //#include "DlgControls.h"
 //#include "DlgSounds.h"
@@ -85,6 +86,7 @@ CGetawayView::CGetawayView()
   //m_bInitClock = true;
 	pDoc = new CGetawayDoc();
 	escape = false;
+  touch_seen = false;
 }
 
 CGetawayView::~CGetawayView() {
@@ -1539,11 +1541,12 @@ void CGetawayView::OnKeyDown(int nChar) {
   } else {
     switch(nChar) {
       case SDLK_ESCAPE:
-		if (dialogs.size() == 0)
-			dialogs.push_back(new DlgMainMenu(this));
-		//dialog = new DlgMainMenu(this);
-		SDL_ShowCursor(SDL_ENABLE);
-		//pDoc->GetSimulation()->m_bPaused = true;
+        if (!isDialogOpen<DlgMainMenu *>()) {
+          dialogs.push_back(new DlgMainMenu(this));
+          SDL_ShowCursor(SDL_ENABLE);
+          pDoc->GetSimulation()->m_bPaused = true;
+        }
+        //dialog = new DlgMainMenu(this);
         /*pDoc->GetSimulation()->m_bPaused = true;
         dialogMenu.SetTitle("menu", 23);
         clockStart = clock();
@@ -1653,18 +1656,14 @@ void CGetawayView::OnKeyUp(int nChar) {
   //CView::OnKeyUp(nChar, nRepCnt, nFlags);
 }
 
-
-
-
-
-
-
 //void CGetawayView::OnMouseMove(UINT nFlags, CPoint point) {
 void CGetawayView::OnMouseMove(int x, int y) {
 	if (dialogs.size() > 0) {
 		vector<Dialog *>::iterator i = --dialogs.end();
-		(*i)->onMouseMove(x - (*i)->getPos()->x, y - (*i)->getPos()->y);
-		return;
+    bool allow_continue = (*i)->onMouseMove(x - (*i)->getPos()->x, y - (*i)->getPos()->y);
+    if (!allow_continue) {
+      return;
+    }
 	}
   if(m_pDrawFunction != &CGetawayView::OnDrawStartMenu) {
     return;
@@ -1696,8 +1695,10 @@ void CGetawayView::OnMouseMove(int x, int y) {
 void CGetawayView::OnLButtonDown(int x, int y) {
 	if (dialogs.size() > 0) {
 		vector<Dialog *>::iterator i = --dialogs.end();
-		(*i)->onMousePress(x - (*i)->getPos()->x, y - (*i)->getPos()->y);
-		return;
+    bool allow_continue = (*i)->onMousePress(x - (*i)->getPos()->x, y - (*i)->getPos()->y);
+    if (!allow_continue) {
+      return;
+    }
 	}
   if(m_pDrawFunction != &CGetawayView::OnDrawStartMenu) {
     return;
@@ -1750,6 +1751,9 @@ void CGetawayView::OnLButtonDown(int x, int y) {
           m_pDrawFunction = &CGetawayView::OnDrawGame;
           //ShowCursor(FALSE);
           SDL_ShowCursor(SDL_DISABLE);
+          if (touch_seen && !isDialogOpen<DlgOnScreenKbd *>()) {
+            dialogs.push_back(new DlgOnScreenKbd(this));
+          }
           //Invalidate();
           break;
         case 1:
@@ -1817,19 +1821,38 @@ void CGetawayView::OnLButtonDown(int x, int y) {
 void CGetawayView::OnLButtonUp(int x, int y) {
 	if (dialogs.size() > 0) {
 		vector<Dialog *>::iterator i = --dialogs.end();
-		(*i)->onMouseRelease(x - (*i)->getPos()->x, y - (*i)->getPos()->y);
-		return;
+    bool allow_continue = (*i)->onMouseRelease(x - (*i)->getPos()->x, y - (*i)->getPos()->y);
+    if (!allow_continue) {
+      return;
+    }
 	}
+}
+
+void CGetawayView::OnFingerDown(float x, float y, int finger_id) {
+  if (dialogs.size() > 0) {
+    vector<Dialog *>::iterator i = --dialogs.end();
+    (*i)->onFingerDown(x * window_width - (*i)->getPos()->x, y * window_height - (*i)->getPos()->y, finger_id);
+  } else if (!isDialogOpen<DlgOnScreenKbd *>() && m_pDrawFunction == &CGetawayView::OnDrawGame) {
+    dialogs.push_back(new DlgOnScreenKbd(this));
+  }
+  touch_seen = true;
+}
+
+void CGetawayView::OnFingerUp(float x, float y, int finger_id) {
+  if (dialogs.size() > 0) {
+    vector<Dialog *>::iterator i = --dialogs.end();
+    (*i)->onFingerUp(x * window_width - (*i)->getPos()->x, y * window_height - (*i)->getPos()->y, finger_id);
+  }
 }
 
 void CGetawayView::drawDialogs() {
 	for (int x = 0; x < dialogs.size(); x++) {
-		if (dialogs[x]->isExit()) {
+	if (dialogs[x]->isExit()) {
 		  delete dialogs[x];
 		  dialogs[x] = NULL;
 		  dialogs.erase(dialogs.begin()+x);
 		  x--;
-		  if (dialogs.size() == 0 && m_pDrawFunction == &CGetawayView::OnDrawGame) {
+		  if (!isDialogOpen<DlgMainMenu *>() && m_pDrawFunction == &CGetawayView::OnDrawGame) {
 			  SDL_ShowCursor(SDL_DISABLE);
 		  }
 		} else {
@@ -1847,6 +1870,20 @@ void CGetawayView::drawDialogs() {
 			drawSurface(x1, y1, x2, y2, GL_RGBA, surface);
 		}
 	}
+}
+
+template<typename D> vector<Dialog *>::iterator CGetawayView::getFirstDialogOfType() {
+  vector<Dialog *>::iterator i;
+  for (i = dialogs.begin(); i != dialogs.end(); i++) {
+    if (dynamic_cast<D>(*i)) {
+      break;
+    }
+  }
+  return i;
+}
+
+template<typename D> bool CGetawayView::isDialogOpen() {
+  return getFirstDialogOfType<D>() != dialogs.end();
 }
 
 void CGetawayView::drawSurface(double x1, double y1, double x2, double y2, GLenum format, SDL_Surface *surface) {
