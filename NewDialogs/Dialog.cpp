@@ -31,18 +31,25 @@ void Dialog::deleteItems() {
 	}
 }
 
+bool Dialog::needsRedraw() {
+  return true; // always drawing, only performance optimizaion on some dialogs which override this method
+}
+
 void Dialog::draw() {
   if (background) {
     SDL_BlitSurface(background, NULL, surface, NULL);
   }
 	for (unsigned int x = 0; x < items.size(); x++) {
 		SDL_BlitSurface(items[x]->getSurface(), NULL, surface, items[x]->getPos());
+    items[x]->drawDone();
 	}
 }
 
 SDL_Surface *Dialog::getSurface() {
-	draw();
-	return surface;
+  if (needsRedraw()) {
+    draw();
+  }
+  return surface;
 }
 
 void Dialog::deleteSurfaceAndBackground() {

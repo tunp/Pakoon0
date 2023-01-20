@@ -4,6 +4,7 @@
 class Item {
 protected:
 	SDL_Surface *surface;
+  bool needs_redraw;
 private:
 	SDL_Rect pos;
 public:
@@ -20,6 +21,8 @@ public:
 	virtual void onMouseMove(int x, int y);
 	virtual void onFingerDown(int x, int y, int finger_id);
 	virtual void onFingerUp(int x, int y, int finger_id);
+  bool needsRedraw();
+  void drawDone();
 };
 
 #endif

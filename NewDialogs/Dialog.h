@@ -11,6 +11,7 @@ public:
 	bool loadBackground(string name);
 	void addItem(Item *item);
 	void deleteItems();
+  virtual bool needsRedraw();
 	void draw();
 	SDL_Surface *getSurface();
 	void deleteSurfaceAndBackground();

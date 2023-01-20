@@ -13,4 +13,5 @@ public:
 	static void keyReleaseCallback(void *p, Button *b);
 	void keyPress(int *key_press);
 	void keyRelease(int *key_press);
+  bool needsRedraw();
 };

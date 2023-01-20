@@ -101,3 +101,11 @@ void DlgOnScreenKbd::keyRelease(int *press_key) {
   pView->OnKeyUp(*press_key);
 }
 
+bool DlgOnScreenKbd::needsRedraw() {
+  for (unsigned int x = 0; x < items.size(); x++) {
+    if (items[x]->needsRedraw()) {
+      return true;
+    }
+  }
+  return false;
+}

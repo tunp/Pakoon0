@@ -9,6 +9,7 @@ Item::Item(SDL_Rect pos) {
 	//pos.h = 12*2.235;
 	this->pos = pos;
 	//init();
+  needs_redraw = true;
 }
 
 Item::~Item() {
@@ -26,6 +27,7 @@ SDL_Surface *Item::getSurface() {
 }
 
 void Item::setSurface(SDL_Surface *surface) {
+  needs_redraw = true;
 	this->surface = surface;
 }
 
@@ -51,4 +53,12 @@ void Item::onFingerDown(int x, int y, int finger_id) {
 }
 
 void Item::onFingerUp(int x, int y, int finger_id) {
+}
+
+bool Item::needsRedraw() {
+  return needs_redraw;
+}
+
+void Item::drawDone() {
+  needs_redraw = false;
 }
