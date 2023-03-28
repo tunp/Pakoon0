@@ -4,7 +4,7 @@ LDFLAGS=-lSDL2 -lSDL2_ttf -lSDL2_image -lGL -lGLU -lvorbisfile
 
 EMXX = em++
 EMXXFLAGS = -Oz -c -s USE_SDL=2 -s USE_SDL_TTF=2 -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS='["png"]' -s USE_VORBIS=1 -I/home/jettis/git/gl4es/include
-EMXXLINK = -s USE_SDL=2 -s USE_SDL_TTF=2 -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS='["png"]' -s USE_VORBIS=1 -s FULL_ES2=1 -L/home/jettis/git/gl4es/lib -lGL4es -L/home/jettis/git/GLU/.libs -lGLU4es -s ALLOW_MEMORY_GROWTH=1
+EMXXLINK = -s USE_SDL=2 -s USE_SDL_TTF=2 -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS='["png"]' -s USE_VORBIS=1 -s FULL_ES2=1 -L/home/jettis/git/gl4es/lib -lGL4es -L/home/jettis/git/GLU/.libs -lGLU4es -s ALLOW_MEMORY_GROWTH=1 -sSTACK_SIZE=5MB
 
 NEW_DIALOG_OBJECTS = DlgMainMenu DlgVisuals DlgSounds DlgControls DlgDropDownList Dialog Item Button DropDownList Scrollbar Listbox Frame ButtonGroup DlgOnScreenKbd KbdButton
 OBJECTS=main2 GetawayView GetawayDoc BSimulation OpenGLHelpers BCar BGround BCamera BObject BaseClasses SoundModule ControllerModule Settings $(addprefix NewDialogs/,$(NEW_DIALOG_OBJECTS))
